@@ -3,15 +3,6 @@
 (defconst grimoire-buffer "*Grimoire*"
   "Name of the Grimoire buffer")
 
-(defvar grimoire-file-list nil
-  "The list of files to display")
-
-;; Functions
-
-(defun grimoire-print-header ()
-  (insert "Grimoire\n\n")
-  )
-
 ;; Framework
 
 (defvar grimoire-mode-hook nil
