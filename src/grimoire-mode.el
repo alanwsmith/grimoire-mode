@@ -7,6 +7,15 @@
   (kill-all-local-variables)
   (setq major-mode 'grimoire-mode)
   (setq mode-name "Grimoire")
-  (run-hooks 'grimoire-mode-hook)
+  (run-hooks 'grimoire-mode-hook))
 
+(defun grimoire ()
+  "Test to see if this provides grimoire"
+  (interactive)
+  (if (not (eq major-mode 'grimoire-mode))
+      (grimoire-mode)
+      )
 
+  )
+
+(provide 'grimoire)
