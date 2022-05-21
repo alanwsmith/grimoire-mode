@@ -97,18 +97,32 @@
 ; (provide 'grimoire)
 
 
-(helm :sources (helm-build-async-source "aws-helm-source"
-                      :candidates-process
-                      (lambda ()
-                        (switch-to-buffer grimoire-buffer)
-                        (insert "asdf")
-                      (start-process "echo" nil "echo" "a\nb\nc\nd\ne")))
-      :buffer "*helm async source*")
+(defvar page-to-open nil
+  "The page to open when the search is done")
 
 
 (defun aws-helm-test ()
-  (interactive)
-  (helm :sources 'aws-helm-source
-        :buffer "*helm my command*"))
+    (interactive)
+    (switch-to-buffer grimoire-buffer)
+    (helm :sources (helm-build-async-source "aws-helm-source"
+                      :candidates-process
+                      (lambda ()
+                        (switch-to-buffer grimoire-buffer)
+                        ; (insert helm-pattern)
+                        ; (start-process "echo" nil "echo" (shell-quote-argument helm-pattern))))
+                        (start-process "echo" nil "echo" "a\nb\nc\nd\ne")
+                        )
+                      )
+      :buffer "*helm async source*")
+
+)
+
+
+; (insert candidate)
+
+;; (defun aws-helm-test ()
+;;   (interactive)
+;;   (helm :sources 'aws-helm-source
+;;         :buffer "*helm my command*"))
 
 
