@@ -100,20 +100,46 @@
 (defvar page-to-open nil
   "The page to open when the search is done")
 
+(defun aws-open-file (line)
+  (switch-to-buffer grimoire-buffer)
+  (insert "here")
+  (insert (car line))
+  (insert (cdr line))
+  )
+
+
+
+(setq helm-move-selection-after-hook 'aws-get-line)
+
+(defun aws-get-line ()
+  (switch-to-buffer grimoire-buffer)
+  (insert "Moved selection to: ")
+  (insert (helm-get-selection nil t))
+  (insert "\n")
+  )
 
 (defun aws-helm-test ()
     (interactive)
     (switch-to-buffer grimoire-buffer)
-    (helm :sources (helm-build-async-source "aws-helm-source"
-                      :candidates-process
-                      (lambda ()
-                        (switch-to-buffer grimoire-buffer)
-                        ; (insert helm-pattern)
+    (insert (helm :sources (helm-build-async-source "aws-helm-source"
+                     :candidates-process
+                     (lambda ()
+                       (switch-to-buffer grimoire-buffer)
+                       (insert "Changed search to: ")
+                       (insert helm-pattern)
+                       (insert "\n")
+                                        ; (insert helm-buffer)
                         ; (start-process "echo" nil "echo" (shell-quote-argument helm-pattern))))
                         (start-process "echo" nil "echo" "a\nb\nc\nd\ne")
                         )
                       )
-      :buffer "*helm async source*")
+      :buffer "*helm async source*"
+      ; :get-line 'aws-get-line
+      ; :persistent-action 'aws-get-line
+      ; :action '(("Open file" . aws-open-file))
+      ; :get-line 'buffer-substring
+      )
+            )
 
 )
 
