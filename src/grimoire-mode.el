@@ -108,7 +108,7 @@
   )
 
 
-
+; This is what makes the updates happen when chaging the selection
 (setq helm-move-selection-after-hook 'aws-get-line)
 
 (defun aws-get-line ()
