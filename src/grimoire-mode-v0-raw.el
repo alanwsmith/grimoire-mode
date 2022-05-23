@@ -175,7 +175,7 @@
 )
   )
 
-; (grimoire-mode-search-v3)
+(grimoire-mode-search-v3)
 
 ;; (defun grimoire-mode-search-v2 ()
 ;;   "This uses start-process which gets the list
