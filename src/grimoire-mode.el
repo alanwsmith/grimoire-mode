@@ -1,13 +1,14 @@
 ;; This version works for the basic pull but
 ;; doesn't update the main window
 
-(defconst grimoire-buffer "*Grimoire*"
+(defconst grimoire-mode-buffer "*Grimoire*"
   "Name of the Grimoire buffer")
 
 
 (defvar meilisearch-auth-token nil 
   "The search key for meilisearch"
   )
+
 
 (defvar curl-search-command-for-resutls nil
   "The curl command used to query meilisearch"
@@ -72,7 +73,7 @@ list of items to show in the results"
 
   (setq helm-buffer-line (- helm-buffer-line 2))
 
-  (switch-to-buffer grimoire-buffer)
+  (switch-to-buffer grimoire-mode-buffer)
   (erase-buffer)
 
   (set-curl-search-command-for-contents
@@ -86,22 +87,44 @@ list of items to show in the results"
                 curl-search-command-for-contents
                 )
   )
-(setq helm-move-selection-after-hook 'post-line-move-hook)
 
 
-(defun grimoire-mode-search-v0.5 ()
+; (setq display-line-numbers 'relative)
+
+;; Load the meilisearch key
+;; This could probably be moved out so it just runs once
+(setq meilisearch-auth-token
+      (string-clean-whitespace
+       (file-to-string "/Users/alan/configs/grimoire-mode/meilisearch-token")
+       )
+      )
+
+
+(defun grimoire-mode-load-content ()
+
+  (if (string= helm-pattern "")
+  (insert "-- Grimoire Mode --")
+
+
+  ;; This first call updates the contents buffer
+  (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
+                curl-search-command-for-contents
+                )
+  )
+
+  )
+
+
+(defun grimoire-mode-search-v0.6 ()
   "This version makes two calls to the meilisearch search
 the first one returns the data for the file and the second one
 returns the next list of candidates"
-  (setq meilisearch-auth-token
-        (string-clean-whitespace
-         (file-to-string "/Users/alan/configs/grimoire-mode/meilisearch-token")
-         )
-        )
+  ;; Setup the hook for catching update via arrow keys
+  (setq helm-move-selection-after-hook 'post-line-move-hook)
 
   (interactive)
 
-  (switch-to-buffer grimoire-buffer)
+  (switch-to-buffer grimoire-mode-buffer)
 
   (erase-buffer)
 
@@ -110,7 +133,7 @@ returns the next list of candidates"
           :candidates-process
           (lambda ()
 
-            (switch-to-buffer grimoire-buffer)
+            (switch-to-buffer grimoire-mode-buffer)
 
             (erase-buffer)
 
@@ -124,10 +147,12 @@ returns the next list of candidates"
              meilisearch-auth-token
              helm-pattern)
 
-            ;; This first call updates the contents buffer
-            (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
-                          curl-search-command-for-contents
-                          )
+            ;; ;; This first call updates the contents buffer
+            ;; (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
+            ;;               curl-search-command-for-contents
+            ;;               )
+
+            (grimoire-mode-load-content)
 
             ;; This call gets the list of results to
             ;; set as the next list of candidates
