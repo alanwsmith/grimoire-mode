@@ -138,6 +138,8 @@
   (insert "\n")
   )
 
+
+
 (defun aws-helm-test()
   (setq meilisearch-auth-token
         (string-clean-whitespace
@@ -156,8 +158,9 @@
                                    meilisearch-auth-token
                                    "' -H 'Content-Type: application/json' --data-binary '{ \"q\": "
                                    "\"" helm-pattern  "\" }'  | jq -r '.hits[] | .title'"
+                                   )
 
-                           )
+
                            )
 
                      (switch-to-buffer grimoire-buffer)
