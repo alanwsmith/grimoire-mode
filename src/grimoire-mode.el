@@ -152,10 +152,10 @@
                    (lambda ()
 
                      (setq curl-search-command
-                           (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/set-1/search' -H 'Authorization: Bearer " 
+                           (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/movies/search' -H 'Authorization: Bearer " 
                                    meilisearch-auth-token
                                    "' -H 'Content-Type: application/json' --data-binary '{ \"q\": "
-                                   "\"" (shell-quote-argument helm-pattern)  "\" }'  | jq -r '.hits[] | .path'"
+                                   "\"" helm-pattern  "\" }'  | jq -r '.hits[] | .title'"
 
                            )
                            )
