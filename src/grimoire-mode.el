@@ -27,7 +27,8 @@
 
 (defun set-curl-search-command-for-contents (
                                              auth-token
-                                             query-string)
+                                             query-string
+                                             index)
   "Build the curl command to get the content
 for the top search result"
 
@@ -35,7 +36,7 @@ for the top search result"
         (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/movies/search' -H 'Authorization: Bearer " 
                 auth-token
                 "' -H 'Content-Type: application/json' --data-binary '{ \"q\": "
-                "\"" query-string "\" }'  | jq -r '.hits[0] | .overview'"
+                "\"" query-string "\" }'  | jq -r '.hits[" index "] | .overview'"
                 )
         )
   )
@@ -64,24 +65,27 @@ list of items to show in the results"
 
 (defun post-line-move-hook ()
   (switch-to-buffer helm-buffer)
-  (setq helm-buffer-line (with-current-buffer helm-buffer (format-mode-line "%l")))
+  (setq helm-buffer-line
+        (with-current-buffer helm-buffer (string-to-number (format-mode-line "%l")))
+
+        )
+
+  (setq helm-buffer-line (- helm-buffer-line 2))
 
   (switch-to-buffer grimoire-buffer)
+  (erase-buffer)
 
-  ;; (insert (format-mode-line "%l"))
-  ;; (insert "\n")
-  ;; (insert (format-mode-line "%l"))
-  ;; (insert "\n")
-  ;; (insert helm-buffer)
+  (set-curl-search-command-for-contents
+   meilisearch-auth-token
+   helm-pattern
+   (number-to-string helm-buffer-line)
+   )
 
-  (insert "\n")
-  (insert helm-buffer-line)
-
-  ; (insert (with-current-buffer helm-buffer (format-mode-line "%l")))
-
-
+  ;; This first call updates the contents buffer
+  (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
+                curl-search-command-for-contents
+                )
   )
-
 (setq helm-move-selection-after-hook 'post-line-move-hook)
 
 
@@ -112,19 +116,18 @@ returns the next list of candidates"
 
             (set-curl-search-command-for-contents
              meilisearch-auth-token
-             helm-pattern)
+             helm-pattern
+             "0"
+             )
 
             (set-curl-search-command-for-results
              meilisearch-auth-token
              helm-pattern)
 
-            (insert helm-buffer)
-
             ;; This first call updates the contents buffer
             (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
                           curl-search-command-for-contents
                           )
-
 
             ;; This call gets the list of results to
             ;; set as the next list of candidates
