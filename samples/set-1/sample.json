@@ -1,0 +1,19 @@
+[
+
+    {
+    "id": 1,
+    "path": "a/b/c",
+    "text": "the quick brown fox"
+},
+    {
+    "id": 2,
+    "path": "d/e/f",
+    "text": "Glue the sheet to the dark blue background. fox"
+    
+},
+    {
+    "id": 3,
+    "path": "g/h/i",
+    "text": "The box was thrown beside the parked truck. sheet."
+}
+]
