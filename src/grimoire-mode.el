@@ -9,11 +9,11 @@
   "The search key for meilisearch"
   )
 
-(defvar curl-search-command nil
+(defvar curl-search-command-for-resutls nil
   "The curl command used to query meilisearch"
   )
 
-(defvar curl-search-command-contents nil
+(defvar curl-search-command-for-contents nil
   "For getting the contents for the top result"
   )
 
@@ -24,7 +24,6 @@
     (buffer-string)
     )
   )
-
 
 (defun set-curl-search-command-for-contents (
                                              auth-token
@@ -43,6 +42,23 @@ for the top search result"
 
 
 
+(defun set-curl-search-command-for-results (
+                                            auth-token
+                                            query-string)
+  "The version of the command that gets the full
+list of items to show in the results"
+
+  (setq curl-search-command-for-results
+        (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/movies/search' -H 'Authorization: Bearer " 
+                auth-token
+                "' -H 'Content-Type: application/json' --data-binary '{ \"q\": "
+                "\"" query-string "\" }'  | jq -r '.hits[] | .title'"
+                )
+        )
+  )
+
+
+
 (defun grimoire-mode-search-v0.4 ()
   "This version makes two calls to the meilisearch search
 the first one returns the data for the file and the second one
@@ -50,31 +66,43 @@ returns the next list of candidates"
   (setq meilisearch-auth-token
         (string-clean-whitespace
          (file-to-string "/Users/alan/configs/grimoire-mode/meilisearch-token")
+         )
         )
-        )
+
   (interactive)
+
   (switch-to-buffer grimoire-buffer)
+
   (erase-buffer)
-   (helm :sources (helm-build-async-source "aws-helm-source"
-                   :candidates-process
-                   (lambda ()
-                     (setq curl-search-command
-                           (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/movies/search' -H 'Authorization: Bearer " 
-                                   meilisearch-auth-token
-                                   "' -H 'Content-Type: application/json' --data-binary '{ \"q\": "
-                                   "\"" helm-pattern  "\" }'  | jq -r '.hits[] | .title'"
-                                   )
+
+  (helm :sources
+        (helm-build-async-source "aws-helm-source"
+          :candidates-process
+          (lambda ()
+
+            (switch-to-buffer grimoire-buffer)
+
+            (erase-buffer)
+
+            (set-curl-search-command-for-contents
+             meilisearch-auth-token
+             helm-pattern)
+
+            (set-curl-search-command-for-results
+             meilisearch-auth-token
+             helm-pattern)
+
+            ;; This first call updates the contents buffer
+            (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
+                          curl-search-command-for-contents
+                          )
+
+            ;; This call gets the list of results to
+            ;; set as the next list of candidates
+            (start-process "bash" nil "/bin/bash" "-c"
+                           curl-search-command-for-results
                            )
-                     (switch-to-buffer grimoire-buffer)
-                     (erase-buffer)
-                     (set-curl-search-command-for-contents meilisearch-auth-token helm-pattern)
-                     (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
-                                    curl-search-command-for-contents
-                                    )
-                     (start-process "bash" nil "/bin/bash" "-c"
-                                    curl-search-command
-                                    )
-                      )
-                     )
-                   )
+            )
+          )
+        )
   )
