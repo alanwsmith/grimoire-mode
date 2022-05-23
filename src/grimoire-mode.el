@@ -147,18 +147,17 @@ returns the next list of candidates"
              meilisearch-auth-token
              helm-pattern)
 
-            ;; ;; This first call updates the contents buffer
-            ;; (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
-            ;;               curl-search-command-for-contents
-            ;;               )
-
             (grimoire-mode-load-content)
 
-            ;; This call gets the list of results to
-            ;; set as the next list of candidates
-            (start-process "bash" nil "/bin/bash" "-c"
-                           curl-search-command-for-results
-                           )
+            (if (string= helm-pattern "")
+                (start-process "bash" nil "/bin/bash" "-c"
+                               "echo 'Ready...'"
+                               )
+              (start-process "bash" nil "/bin/bash" "-c"
+                             curl-search-command-for-results
+                             )
+                )
+
             )
           )
         )
