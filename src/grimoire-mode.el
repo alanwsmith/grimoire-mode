@@ -154,24 +154,17 @@
                      (setq curl-search-command
                            (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/set-1/search' -H 'Authorization: Bearer " 
                                    meilisearch-auth-token
-                                   "' -H 'Content-Type: application/json' --data-binary '{ \"q\": \"fox\" }'  | jq -r '.hits[] | .path'"
+                                   "' -H 'Content-Type: application/json' --data-binary '{ \"q\": "
+                                   "\"" (shell-quote-argument helm-pattern)  "\" }'  | jq -r '.hits[] | .path'"
 
                            )
                            )
 
                      (switch-to-buffer grimoire-buffer)
-                     (insert curl-search-command)
 
                      (start-process "bash" nil "/bin/bash" "-c"
                                     curl-search-command
                                     )
-
-
-                     ; (start-process "bash" nil "echo" meilisearch-key)
-                     ; (start-process "bash" nil "echo" meilisearch-auth-string)
-
-                     ;; (start-process "bash" nil "/bin/bash" "/Users/alan/workshop/grimoire-mode/samples/set-1/query.bash")
-
 
                       )
 
