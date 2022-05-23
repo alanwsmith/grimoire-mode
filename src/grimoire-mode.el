@@ -97,8 +97,18 @@
 ; (provide 'grimoire)
 
 
-(defvar page-to-open nil
-  "The page to open when the search is done")
+(defvar page-to-open 
+  "The page to open when the search is done"
+  )
+
+
+(defvar meilisearch-auth-token nil 
+  "The search key for meilisearch"
+  )
+
+(defvar curl-search-command nil
+  "The curl command used to query meilisearch"
+  )
 
 (defun aws-open-file (line)
   (switch-to-buffer grimoire-buffer)
@@ -106,6 +116,16 @@
   (insert (car line))
   (insert (cdr line))
   )
+
+(defun file-to-string (file)
+  "Read a file into a string"
+  (with-temp-buffer
+    (insert-file-contents file)
+    (buffer-string)
+    )
+  )
+
+
 
 
 ; This is what makes the updates happen when chaging the selection
@@ -118,30 +138,83 @@
   (insert "\n")
   )
 
-(defun aws-helm-test ()
-    (interactive)
-    (switch-to-buffer grimoire-buffer)
-    (insert (helm :sources (helm-build-async-source "aws-helm-source"
-                     :candidates-process
-                     (lambda ()
-                       (switch-to-buffer grimoire-buffer)
-                       (insert "Changed search to: ")
-                       (insert helm-pattern)
-                       (insert "\n")
-                                        ; (insert helm-buffer)
-                        ; (start-process "echo" nil "echo" (shell-quote-argument helm-pattern))))
-                        (start-process "echo" nil "echo" "a\nb\nc\nd\ne")
-                        )
+(defun aws-helm-test()
+  (setq meilisearch-auth-token
+        (string-clean-whitespace
+         (file-to-string "/Users/alan/configs/grimoire-mode/meilisearch-token")
+        )
+        )
+
+  (interactive)
+  (switch-to-buffer grimoire-buffer)
+  (helm :sources (helm-build-async-source "aws-helm-source"
+                   :candidates-process
+                   (lambda ()
+
+                     (setq curl-search-command
+                           (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/set-1/search' -H 'Authorization: Bearer " 
+                                   meilisearch-auth-token
+                                   "' -H 'Content-Type: application/json' --data-binary '{ \"q\": \"fox\" }'  | jq -r '.hits[] | .path'"
+
+                           )
+                           )
+
+                     (switch-to-buffer grimoire-buffer)
+                     (insert curl-search-command)
+
+                     (start-process "bash" nil "/bin/bash" "-c"
+                                    curl-search-command
+                                    )
+
+
+                     ; (start-process "bash" nil "echo" meilisearch-key)
+                     ; (start-process "bash" nil "echo" meilisearch-auth-string)
+
+                     ;; (start-process "bash" nil "/bin/bash" "/Users/alan/workshop/grimoire-mode/samples/set-1/query.bash")
+
+
                       )
-      :buffer "*helm async source*"
+
+                     )
+
+                   ))
+
+
+;; (defun x-aws-helm-test-original ()
+;;     (interactive)
+;;     (switch-to-buffer grimoire-buffer)
+;;     (helm :sources (helm-build-async-source "aws-helm-source-original"
+;;                      :candidates-process
+;;                      (lambda ()
+;;                        (switch-to-buffer grimoire-buffer)
+;;                        (insert "Changed search to: ")
+;;                        (insert helm-pattern)
+;;                        (insert "\n")
+;;                                         ; (insert helm-buffer)
+;;                         ; (start-process "echo" nil "echo" (shell-quote-argument helm-pattern))))
+;;                         (start-process "echo" nil "echo" "a\nb\nc\nd\ne")
+
+                       ;; (start-process
+                       ;;  "curl" nil "curl" "-s" "-X" "GET"
+                       ;;  "http://127.0.0.1:7575/indexes/set-1/search?q=fox"
+                       ;;  "-H"
+                       ;;  "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--search-key)"
+                       ;;  "|" "jq" "-r" ".hits[] | .path"
+                       ;;  )
+
+                      ;)
+      ; :buffer "*helm async source*"
       ; :get-line 'aws-get-line
       ; :persistent-action 'aws-get-line
       ; :action '(("Open file" . aws-open-file))
       ; :get-line 'buffer-substring
-      )
-            )
 
-)
+;;       )
+;;       )
+;;     (insert "Page to open: ")
+;;     (insert page-to-open)
+;;     (insert "\n")
+;; )
 
 
 ; (insert candidate)
