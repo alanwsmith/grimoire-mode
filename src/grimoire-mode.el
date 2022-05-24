@@ -4,11 +4,9 @@
 (defconst grimoire-mode-buffer "*Grimoire*"
   "Name of the Grimoire buffer")
 
-
 (defvar meilisearch-auth-token nil 
   "The search key for meilisearch"
   )
-
 
 (defvar curl-search-command-for-resutls nil
   "The curl command used to query meilisearch"
@@ -43,7 +41,6 @@ for the top search result"
   )
 
 
-
 (defun set-curl-search-command-for-results (
                                             auth-token
                                             query-string)
@@ -58,7 +55,6 @@ list of items to show in the results"
                 )
         )
   )
-
 
 
 (defvar helm-buffer-line nil
@@ -101,17 +97,14 @@ list of items to show in the results"
 
 
 (defun grimoire-mode-load-content ()
-
   (if (string= helm-pattern "")
   (insert "-- Grimoire Mode --")
-
 
   ;; This first call updates the contents buffer
   (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
                 curl-search-command-for-contents
                 )
   )
-
   )
 
 
@@ -140,8 +133,7 @@ returns the next list of candidates"
             (set-curl-search-command-for-contents
              meilisearch-auth-token
              helm-pattern
-             "0"
-             )
+             "0")
 
             (set-curl-search-command-for-results
              meilisearch-auth-token
@@ -150,15 +142,30 @@ returns the next list of candidates"
             (grimoire-mode-load-content)
 
             (if (string= helm-pattern "")
-                (start-process "bash" nil "/bin/bash" "-c"
-                               "echo 'Ready...'"
-                               )
-              (start-process "bash" nil "/bin/bash" "-c"
-                             curl-search-command-for-results
-                             )
-                )
-
+                (start-process "bash"
+                               nil
+                               "/bin/bash"
+                               "-c"
+                               "echo 'Ready...'")
+              (start-process "bash"
+                             nil
+                             "/bin/bash"
+                             "-c"
+                             curl-search-command-for-results)
+              )
             )
           )
         )
   )
+
+
+(defun post-save-test ()
+  (with-current-buffer "*scratch*"
+    (insert "ping")
+    )
+  )
+
+(add-hook 'after-save-hook 'post-save-test)
+
+(global-set-key [f5] 'grimoire-mode-search-v0.6)
+
