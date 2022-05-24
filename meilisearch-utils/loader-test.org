@@ -117,34 +117,61 @@ stuff can be added.
 
 
 #+begin_src bash :results output
-  cd "/Users/alan/workshop/grimoire-mode/samples/set-3"
   echo $(ksuid)
+  curl -s \
+      -H "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--root-key)" \
+      -X DELETE 'http://localhost:7575/indexes/grimoire/documents' 
+  cd "/Users/alan/workshop/grimoire-mode/samples/set-3"
+  cd "/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire"
   for FILE in * 
   do
       ID_HASH=$(echo -n $FILE | md5)
    echo $FILE
    echo $ID_HASH
-   jq -Rsn --rawfile content $FILE --arg id $ID_HASH -f "/Users/alan/workshop/grimoire-mode/samples/template.jq" > "/Users/alan/workshop/grimoire-mode/samples/tmp.json"
-   # jq -Rs --rawfile contents file2.txt '[{id: "asdf", contents: $contents}]' > "/Users/alan/workshop/grimoire-mode/samples/tmp.json"
-   # jq -Rs --rawfile contents file2.txt "[{id: \"asdf\", contents: $contents}]" > "/Users/alan/workshop/grimoire-mode/samples/tmp.json"
-
-     curl -s \
-         -X POST 'http://localhost:7575/indexes/set-5/documents' \
-      -H "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--root-key)" \
-      -H 'Content-Type: application/json' \
-      --data-binary "@/Users/alan/workshop/grimoire-mode/samples/tmp.json"
-
+   jq -Rsn --rawfile content $FILE --arg filename $FILE --arg id $ID_HASH -f "/Users/alan/workshop/grimoire-mode/meilisearch-utils/template.jq" > "/Users/alan/workshop/grimoire-mode/meilisearch-utils/tmp.json"
+      curl -s \
+          -X POST 'http://localhost:7575/indexes/grimoire/documents' \
+       -H "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--root-key)" \
+       -H 'Content-Type: application/json' \
+       --data-binary "@/Users/alan/workshop/grimoire-mode/meilisearch-utils/tmp.json"
    done
 #+end_src
 
 #+RESULTS:
-: 29bEbZYou67qOjB5IfdyiyCk6L5
-: file2.txt
+: 29bGjr9Yt0ITgIZzLeMkxBtjyw1
+: {"uid":41,"indexUid":"grimoire","status":"enqueued","type":"clearAll","enqueuedAt":"2022-05-24T06:41:49.087755Z"}file2.txt
 : 273604bfeef7126abe1f9bff1e45126c
-: {"uid":22,"indexUid":"set-5","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T06:24:16.995317Z"}file3.txt
+: {"uid":42,"indexUid":"grimoire","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T06:41:49.142488Z"}file3.txt
 : 113f6696d140c167070bcc5e24791f35
-: {"uid":23,"indexUid":"set-5","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T06:24:17.047874Z"}file_name_1.txt
+: {"uid":43,"indexUid":"grimoire","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T06:41:49.189228Z"}file_name_1.txt
 : 201e562db8b9269fed3939c2fdb6fd25
-: {"uid":24,"indexUid":"set-5","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T06:24:17.100587Z"}
+: {"uid":44,"indexUid":"grimoire","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T06:41:49.236456Z"}
+
+
+This is just a test of java script to see
+about passing via name spaces 
+
+
+
+Create the output funciton 
+
+#+NAME: output-func
+#+begin_src js :results none
+  function output() {
+      console.log("the quick brown fox")
+  }
+#+end_src
+
+
+Use the output function 
+
+#+begin_src js :noweb yes :results output
+  <<output-func>>
+  output()
+#+end_src
+
+#+RESULTS:
+: the quick brown fox
+
 
 
