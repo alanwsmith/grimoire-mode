@@ -32,10 +32,10 @@
 for the top search result"
 
   (setq curl-search-command-for-contents
-        (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/movies/search' -H 'Authorization: Bearer " 
+        (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/grimoire/search' -H 'Authorization: Bearer " 
                 auth-token
                 "' -H 'Content-Type: application/json' --data-binary '{ \"q\": "
-                "\"" query-string "\" }'  | jq -r '.hits[" index "] | .overview'"
+                "\"" query-string "\" }'  | jq -r '.hits[" index "] | .content'"
                 )
         )
   )
@@ -48,10 +48,10 @@ for the top search result"
 list of items to show in the results"
 
   (setq curl-search-command-for-results
-        (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/movies/search' -H 'Authorization: Bearer " 
+        (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/grimoire/search' -H 'Authorization: Bearer " 
                 auth-token
                 "' -H 'Content-Type: application/json' --data-binary '{ \"q\": "
-                "\"" query-string "\" }'  | jq -r '.hits[] | .title'"
+                "\"" query-string "\" }'  | jq -r '.hits[] | .filename'"
                 )
         )
   )
@@ -85,26 +85,27 @@ list of items to show in the results"
   )
 
 
-; (setq display-line-numbers 'relative)
+                                        ; (setq display-line-numbers 'relative)
 
 ;; Load the meilisearch key
 ;; This could probably be moved out so it just runs once
 (setq meilisearch-auth-token
       (string-clean-whitespace
-       (file-to-string "/Users/alan/configs/grimoire-mode/meilisearch-token")
+       (file-to-string
+        "/Users/alan/configs/grimoire-mode/meilisearch-token")
        )
       )
 
 
 (defun grimoire-mode-load-content ()
   (if (string= helm-pattern "")
-  (insert "-- Grimoire Mode --")
+      (insert "-- Grimoire Mode --")
 
-  ;; This first call updates the contents buffer
-  (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
-                curl-search-command-for-contents
-                )
-  )
+    ;; This first call updates the contents buffer
+    (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
+                  curl-search-command-for-contents
+                  )
+    )
   )
 
 
@@ -112,9 +113,13 @@ list of items to show in the results"
   "This version makes two calls to the meilisearch search
 the first one returns the data for the file and the second one
 returns the next list of candidates"
+
+  (switch-to-buffer grimoire-mode-buffer)
+
   ;; Setup the hook for catching update via arrow keys
   (setq helm-move-selection-after-hook 'post-line-move-hook)
 
+  ;; TODO: unset this when leaving the grimoire
   (interactive)
 
   (switch-to-buffer grimoire-mode-buffer)
