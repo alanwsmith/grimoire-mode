@@ -3,7 +3,7 @@
 
 
 (defconst grimoire-mode-base-url
-  "http://127.0.0.1:7700/indexes/test-7/"
+  "http://127.0.0.1:7700/indexes/grimoire/"
   "This is the base url that is used for calls to meilisearch. It controls both the port and the specific search index that's used")
 
 (defconst grimoire-mode-buffer "*Grimoire*"
