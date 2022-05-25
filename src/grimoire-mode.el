@@ -20,12 +20,7 @@
           :candidates-process
           (lambda ()
             (grimiore-mode-update-preview)
-            (start-process
-             "search"
-             nil
-             "/bin/bash"
-             "search-process"
-             helm-pattern)))
+            (start-process "search" nil "/bin/bash" "get-search-results" helm-pattern)))
         :buffer "*helm grimoire search*")
   (kill-buffer grimoire-mode-buffer))
 
