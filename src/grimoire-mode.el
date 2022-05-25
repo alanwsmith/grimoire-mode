@@ -116,12 +116,13 @@ list of items to show in the results"
 
 (defun grimoire-mode-handle-result (return-value)
   "This is what handles the resturn value from the call"
-
-  (switch-to-buffer grimoire-mode-buffer)
-  (insert return-value)
+  (setq helm-move-selection-after-hook nil)
+;  (switch-to-buffer grimoire-mode-buffer)
+;  (insert return-value)
   ; (find-file "/Users/alan/Desktop/emacs-out.txt")
   (find-file (concat "/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire/" return-value))
   (org-mode)
+  (kill-buffer grimoire-mode-buffer)
   )
 
 (defun grimoire-mode-search-v0.6 ()
