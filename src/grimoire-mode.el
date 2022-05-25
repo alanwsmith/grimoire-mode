@@ -87,8 +87,6 @@ list of items to show in the results"
   )
 
 
-                                        ; (setq display-line-numbers 'relative)
-
 ;; Load the meilisearch key
 ;; This could probably be moved out so it just runs once
 (setq meilisearch-auth-token
