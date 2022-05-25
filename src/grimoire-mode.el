@@ -132,13 +132,14 @@ list of items to show in the results"
 the first one returns the data for the file and the second one
 returns the next list of candidates"
 
+  (interactive)
+
   (switch-to-buffer grimoire-mode-buffer)
 
   ;; Setup the hook for catching update via arrow keys
   (setq helm-move-selection-after-hook 'post-line-move-hook)
 
   ;; TODO: unset this when leaving the grimoire
-  (interactive)
 
   (switch-to-buffer grimoire-mode-buffer)
 
