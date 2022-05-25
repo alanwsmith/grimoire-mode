@@ -13,6 +13,7 @@
 
 (defun grimoire-mode-search-v0.10 ()
   (interactive)
+  (setq helm-move-selection-after-hook 'grimiore-mode-update-preview)
   (switch-to-buffer grimoire-mode-buffer)
   (org-mode)
   (helm :sources
@@ -22,6 +23,7 @@
             (grimiore-mode-update-preview)
             (start-process "search" nil "/bin/bash" "get-search-results" helm-pattern)))
         :buffer "*helm grimoire search*")
+  (setq helm-move-selection-after-hook nil)
   (kill-buffer grimoire-mode-buffer))
 
 (global-set-key [f5] 'grimoire-mode-search-v0.10)
