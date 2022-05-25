@@ -20,7 +20,10 @@ start on the second line")
         )
 
   (setq grimoire-mode-helm-buffer-line-adjusted
-        grimoire-mode-helm-buffer-line
+        (max
+         (- grimoire-mode-helm-buffer-line 2)
+         0
+         )
         )
 
   (message (number-to-string grimoire-mode-helm-buffer-line))
