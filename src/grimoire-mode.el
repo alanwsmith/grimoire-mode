@@ -114,6 +114,16 @@ list of items to show in the results"
   )
 
 
+(defun grimoire-mode-handle-result (return-value)
+  "This is what handles the resturn value from the call"
+
+  (switch-to-buffer grimoire-mode-buffer)
+  (insert return-value)
+  ; (find-file "/Users/alan/Desktop/emacs-out.txt")
+  (find-file (concat "/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire/" return-value))
+  (org-mode)
+  )
+
 (defun grimoire-mode-search-v0.6 ()
   "This version makes two calls to the meilisearch search
 the first one returns the data for the file and the second one
@@ -131,7 +141,7 @@ returns the next list of candidates"
 
   (erase-buffer)
 
-  (helm :sources
+  (grimoire-mode-handle-result (helm :sources
         (helm-build-async-source "aws-helm-source"
           :candidates-process
           (lambda ()
@@ -166,6 +176,7 @@ returns the next list of candidates"
             )
           )
         )
+                               )
   )
 
 
