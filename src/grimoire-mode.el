@@ -107,6 +107,8 @@ list of items to show in the results"
                   curl-search-command-for-contents
                   )
     )
+  (goto-char(point-min))
+
   )
 
 
