@@ -2,8 +2,6 @@
 
 AUTH_TOKEN=$(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--search-key)
 
-if [ "$1" ]
-then 
     curl -s \
          -X POST 'http://127.0.0.1:7700/indexes/grimoire/search' \
          -H "Authorization: Bearer $AUTH_TOKEN" \
@@ -12,7 +10,4 @@ then
         | \
         /opt/homebrew/bin/jq \
             -r \
-            '.hits[0] | .content'
-else
-    echo "-- Grimoire Mode --"
-fi 
+            ".hits[$2] | .content"
