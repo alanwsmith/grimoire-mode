@@ -65,14 +65,13 @@ def update_files():
       'alan--meilisearch--scratchpad--admin-key',
       'alan'
   )
+
   index_name = 'grimoire'
 
   client = meilisearch.Client(
       domain,
       admin_key
   )
-
-
 
 
   file_list = list_dir(
@@ -86,11 +85,13 @@ def update_files():
   for file_item in file_list:
       with open(file_item['full_path'], 'r', encoding='utf-8', errors='ignore') as _in:
           if file_item['extension'] == 'txt':
-              content = json.dumps(_in.read())
+              # content = json.dumps(json.dumps(_in.read()))
+              # print(content)
               new_item = {
                   "id": string_to_md5(file_item['name_with_extension']),
                   "filename": file_item['name_with_extension'],
-                  "content": content
+                  # "content": content
+                  "content": _in.read()
               }
               documents.append(new_item)
 
