@@ -173,6 +173,7 @@ returns the next list of candidates"
               )
             )
           )
+        :buffer "*helm grimoire search*"
         )
                                )
   )
