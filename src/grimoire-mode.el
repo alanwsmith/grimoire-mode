@@ -16,15 +16,10 @@ start on the second line")
 (defun grimiore-mode-update-preview ()
 
   (setq grimoire-mode-helm-buffer-line
-        (with-current-buffer helm-buffer (string-to-number (format-mode-line "%l")))
-        )
+        (with-current-buffer helm-buffer (string-to-number (format-mode-line "%l"))))
 
   (setq grimoire-mode-helm-buffer-line-adjusted
-        (max
-         (- grimoire-mode-helm-buffer-line 2)
-         0
-         )
-        )
+        (max (- grimoire-mode-helm-buffer-line 2) 0) )
 
   (message (number-to-string grimoire-mode-helm-buffer-line))
   (switch-to-buffer grimoire-mode-buffer)
@@ -38,11 +33,8 @@ start on the second line")
    nil
    "get-search-content"
    helm-pattern
-   (number-to-string grimoire-mode-helm-buffer-line-adjusted)
-   )
-  )
+   (number-to-string grimoire-mode-helm-buffer-line-adjusted)))
   (goto-char (point-min)))
-
 
 
 (defun grimoire-mode-search-v0.10 ()
