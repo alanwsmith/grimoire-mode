@@ -40,10 +40,12 @@ def list_dir(*, root_dir, sub_dir=''):
 
 
     sub_dir_list = [
-        directory for directory in glob.glob(
-            f"{dir_to_process}/*"
-        )
-        if os.path.isdir(directory)
+
+        # directory for directory in glob.glob(
+        #     f"{dir_to_process}/*"
+        # )
+        # if os.path.isdir(directory)
+
     ]
 
     for sub_dir_full_path in sub_dir_list:
