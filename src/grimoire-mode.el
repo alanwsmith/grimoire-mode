@@ -98,6 +98,7 @@ list of items to show in the results"
 
 
 (defun grimoire-mode-load-content ()
+  (switch-to-buffer grimoire-mode-buffer)
   (if (string= helm-pattern "")
       (insert "-- Grimoire Mode --")
 
