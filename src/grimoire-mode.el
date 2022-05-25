@@ -103,12 +103,11 @@ list of items to show in the results"
       (insert "-- Grimoire Mode --")
 
     ;; This first call updates the contents buffer
-    (call-process "/bin/bash" nil "*Grimoire*" nil "-c"
+    (call-process "/bin/bash" nil grimoire-mode-buffer nil "-c"
                   curl-search-command-for-contents
                   )
     )
   (goto-char(point-min))
-
   )
 
 
@@ -120,7 +119,7 @@ list of items to show in the results"
       (message "No file selected")
     (progn
       (message (concat "Loading: " return-value) )
-      (find-file (concat "/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire/" return-value))
+      (find-file(concat "/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire/" return-value))
       (org-mode)
       )
       )
@@ -131,26 +130,18 @@ list of items to show in the results"
   "This version makes two calls to the meilisearch search
 the first one returns the data for the file and the second one
 returns the next list of candidates"
-
   (interactive)
-
-  (switch-to-buffer grimoire-mode-buffer)
-
   ;; Setup the hook for catching update via arrow keys
-  (setq helm-move-selection-after-hook 'post-line-move-hook)
-
   ;; TODO: unset this when leaving the grimoire
-
-  (switch-to-buffer grimoire-mode-buffer)
-
-  (erase-buffer)
-
+  (setq helm-move-selection-after-hook 'post-line-move-hook)
+  ; (switch-to-buffer grimoire-mode-buffer)
+  ; (erase-buffer)
   (grimoire-mode-handle-result (helm :sources
-        (helm-build-async-source "aws-helm-source"
+        (helm-build-async-source "Grimoire Search"
           :candidates-process
           (lambda ()
-            (switch-to-buffer grimoire-mode-buffer)
-            (erase-buffer)
+            ; (switch-to-buffer grimoire-mode-buffer)
+            ; (erase-buffer)
             (set-curl-search-command-for-contents
              meilisearch-auth-token
              helm-pattern
@@ -158,7 +149,7 @@ returns the next list of candidates"
             (set-curl-search-command-for-results
              meilisearch-auth-token
              helm-pattern)
-            (grimoire-mode-load-content)
+            ; (grimoire-mode-load-content)
             (if (string= helm-pattern "")
                 (start-process "bash"
                                nil
@@ -176,6 +167,31 @@ returns the next list of candidates"
         :buffer "*helm grimoire search*"
         )
                                )
+  )
+
+
+(defun grimoire-mode-search-v0.7 ()
+  (interactive)
+  (helm :sources
+  (helm-build-async-source "Grimoire Search"
+    :candidates-process
+    (lambda ()
+      (if (string= helm-pattern "")
+      (start-process "bash"
+                     nil
+                     "/bin/bash"
+                     "-c"
+                     "echo 'Ready...'")
+      (start-process "bash"
+                     nil
+                     "/bin/bash"
+                     "-c"
+                     "echo 'Running...'")
+      )
+      )
+  )
+  :buffer "*helm grimoire search*"
+  )
   )
 
 
@@ -201,5 +217,5 @@ returns the next list of candidates"
 ;;   )
 ;; (add-hook 'after-save-hook 'post-save-test)
 
-(global-set-key [f5] 'grimoire-mode-search-v0.6)
+(global-set-key [f5] 'grimoire-mode-search-v0.7)
 
