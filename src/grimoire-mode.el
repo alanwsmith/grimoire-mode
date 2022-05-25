@@ -1,6 +1,11 @@
 ;; This version works for the basic pull but
 ;; doesn't update the main window
 
+
+(defconst grimoire-mode-base-url
+  "http://127.0.0.1:7700/indexes/grimoire/"
+  "This is the base url that is used for calls to meilisearch. It controls both the port and the specific search index that's used")
+
 (defconst grimoire-mode-buffer "*Grimoire*"
   "Name of the Grimoire buffer")
 
@@ -32,7 +37,7 @@
 for the top search result"
 
   (setq curl-search-command-for-contents
-        (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/grimoire/search' -H 'Authorization: Bearer " 
+        (concat "curl -s -X POST '" grimoire-mode-base-url "search' -H 'Authorization: Bearer "
                 auth-token
                 "' -H 'Content-Type: application/json' --data-binary '{ \"q\": "
                 "\"" query-string "\" }'  | jq -r '.hits[" index "] | .content'"
@@ -48,7 +53,7 @@ for the top search result"
 list of items to show in the results"
 
   (setq curl-search-command-for-results
-        (concat "curl -s -X POST 'http://127.0.0.1:7575/indexes/grimoire/search' -H 'Authorization: Bearer " 
+        (concat "curl -s -X POST '" grimoire-mode-base-url "search' -H 'Authorization: Bearer "
                 auth-token
                 "' -H 'Content-Type: application/json' --data-binary '{ \"q\": "
                 "\"" query-string "\" }'  | jq -r '.hits[] | .filename'"
