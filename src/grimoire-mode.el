@@ -1,25 +1,23 @@
-;; This version works for the basic pull but
-;; doesn't update the main window
+;; This is the main grimoire file
 
 
 (defconst grimoire-mode-base-url
   "http://127.0.0.1:7700/indexes/grimoire/"
-  "This is the base url that is used for calls to meilisearch. It controls both the port and the specific search index that's used")
+  "This is the base url that is used for calls
+to meilisearch. It controls both the port and
+the specific search index that's used")
 
 (defconst grimoire-mode-buffer "*Grimoire*"
   "Name of the Grimoire buffer")
 
 (defvar meilisearch-auth-token nil 
-  "The search key for meilisearch"
-  )
+  "The search key for meilisearch")
 
 (defvar curl-search-command-for-resutls nil
-  "The curl command used to query meilisearch"
-  )
+  "The curl command used to query meilisearch")
 
 (defvar curl-search-command-for-contents nil
-  "For getting the contents for the top result"
-  )
+  "For getting the contents for the top result")
 
 (defun file-to-string (file)
   "Read a file into a string"
@@ -69,7 +67,6 @@ list of items to show in the results"
   (switch-to-buffer helm-buffer)
   (setq helm-buffer-line
         (with-current-buffer helm-buffer (string-to-number (format-mode-line "%l")))
-
         )
 
   (setq helm-buffer-line (- helm-buffer-line 2))
@@ -150,22 +147,16 @@ returns the next list of candidates"
         (helm-build-async-source "aws-helm-source"
           :candidates-process
           (lambda ()
-
             (switch-to-buffer grimoire-mode-buffer)
-
             (erase-buffer)
-
             (set-curl-search-command-for-contents
              meilisearch-auth-token
              helm-pattern
              "0")
-
             (set-curl-search-command-for-results
              meilisearch-auth-token
              helm-pattern)
-
             (grimoire-mode-load-content)
-
             (if (string= helm-pattern "")
                 (start-process "bash"
                                nil
@@ -199,7 +190,6 @@ returns the next list of candidates"
 (add-hook 'after-save-hook
           'grimoire-mode-update-index
           )
-
 
 ;; (defun post-save-test ()
 ;;   (with-current-buffer "*scratch*"
