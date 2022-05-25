@@ -9,7 +9,7 @@ if [ "$1" ]
             -X POST 'http://127.0.0.1:7700/indexes/grimoire/search' \
             -H "Authorization: Bearer $AUTH_TOKEN" \
             -H 'Content-Type: application/json' \
-            --data-binary "{ \"q\": \"$1\" }" \
+            --data-binary "{ \"q\": \"$1\", \"limit\": 10 }" \
                   | \
                   /opt/homebrew/bin/jq \
                                   -r \
