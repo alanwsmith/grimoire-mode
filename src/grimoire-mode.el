@@ -181,13 +181,28 @@ returns the next list of candidates"
   )
 
 
-(defun post-save-test ()
-  (with-current-buffer "*scratch*"
-    (insert "ping")
-    )
+(defun grimoire-mode-update-index ()
+  "Function to run the update script"
+  (message "Updating Index")
+  (start-process "uploader"
+                 nil
+                 "/opt/homebrew/bin/python3"
+                 "/Users/alan/workshop/grimoire-mode/meilisearch-utils/update.py"
+                 )
   )
 
-(add-hook 'after-save-hook 'post-save-test)
+;; TODO: Set this up so it's only org mode probably
+(add-hook 'after-save-hook
+          'grimoire-mode-update-index
+          )
+
+
+;; (defun post-save-test ()
+;;   (with-current-buffer "*scratch*"
+;;     (insert "ping")
+;;     )
+;;   )
+;; (add-hook 'after-save-hook 'post-save-test)
 
 (global-set-key [f5] 'grimoire-mode-search-v0.6)
 
