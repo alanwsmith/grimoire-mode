@@ -90,5 +90,4 @@ results in the grimoire"
   )
 
 
-(add-hook 'after-save-hook 'grimoire-mode-update-search-index)
 (global-set-key [f5] 'grimoire-mode-search-v0.10)
