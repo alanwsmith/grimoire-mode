@@ -1,0 +1,177 @@
+#+begin_src bash :results output 
+  curl -s \
+  -X POST 'http://127.0.0.1:7575/indexes/movies/search' \
+  -H "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--root-key)" \
+  -H "Content-Type: application/json" \
+  --data-binary '{ "q": "fox" }' \
+  | \
+  jq -r '.hits[0] | .overview'
+#+end_src
+
+#+RESULTS:
+: Fox, a former circus performer, wins the lottery of DM 500,000 and can now have the life and things that he has always wanted. While he wants to climb up the social ladder, it isn't without turmoil, and being torn between his old working class roots, and the shiny new facade of middle class consciousness.
+
+
+This is the command to slurp in and use the json data...
+#+begin_src bash :results output
+  jq -Rs --rawfile contents input.txt '[{id: "file_name.txt", contents: $contents}]' > input.json
+#+end_src
+
+#+RESULTS:
+
+
+This is the one to try to add a document (the index
+will be created automatically)
+
+#+begin_src bash :results output 
+    curl -s \
+        -X POST 'http://localhost:7575/indexes/set-4/documents' \
+     -H "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--root-key)" \
+     -H 'Content-Type: application/json' \
+     --data-binary "@input.json"
+
+    # --data-binary "[ \
+     #             { \"id\": \"here\", \"contents\": \"werwklerj\" }
+     #   ]" | jq -r
+  #    $(jq -Rs --rawfile contents input.txt '{id: \"file_name.txt\", contents: $contents}') \
+
+#+end_src
+
+#+RESULTS:
+: {"uid":13,"indexUid":"set-4","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T05:16:46.74727Z"}
+
+
+
+#+begin_src bash :results output
+  curl -s \
+     -H "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--root-key)" \
+  -X GET 'http://localhost:7575/tasks/14' \
+     | jq -r
+#+end_src
+
+#+RESULTS:
+#+begin_example
+{
+  "uid": 14,
+  "indexUid": "set-4",
+  "status": "succeeded",
+  "type": "documentAddition",
+  "details": {
+    "receivedDocuments": 1,
+    "indexedDocuments": 1
+  },
+  "duration": "PT0.025191S",
+  "enqueuedAt": "2022-05-24T05:21:25.688136Z",
+  "startedAt": "2022-05-24T05:21:25.692037Z",
+  "finishedAt": "2022-05-24T05:21:25.717228Z"
+}
+#+end_example
+
+
+
+
+Working to assemble the full command for pushing a file
+
+#+begin_src bash :results output
+  curl -s \
+      -H "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--root-key)" \
+  -X DELETE 'http://localhost:7575/indexes/set-4/documents' \
+      && \ 
+  jq -Rs --rawfile contents input2.txt '[{id: "file_name4", contents: $contents}]' > input2.json \
+     && \
+     curl -s \
+         -X POST 'http://localhost:7575/indexes/set-4/documents' \
+      -H "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--root-key)" \
+      -H 'Content-Type: application/json' \
+      --data-binary "@input2.json"
+#+end_src
+
+#+RESULTS:
+: {"uid":20,"indexUid":"set-4","status":"enqueued","type":"clearAll","enqueuedAt":"2022-05-24T05:25:58.170938Z"}{"uid":21,"indexUid":"set-4","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T05:25:58.228977Z"}
+
+
+
+This is the test to get setup to use a template
+
+The `-n` is necessary. It sends null data to jq so the rest of teh
+stuff can be added. 
+
+
+#+begin_src bash :results output
+      cd "/Users/alan/workshop/grimoire-mode/samples"
+       # jq -Rs --rawfile contents file2.txt template.jq > "/Users/alan/workshop/grimoire-mode/samples/tmp2.json"
+       # jq -n --arg t1 junk -f template.jq
+       jq -Rsn --rawfile t1 "set-3/file2.txt" --arg t1 junk -f template.jq
+       # > "/Users/alan/workshop/grimoire-mode/samples/tmp2.json"
+       # echo $(ksuid)
+    #/Users/alan/workshop/grimoire-mode/samples
+#+end_src
+
+#+RESULTS:
+: [
+:   {
+:     "id": "asdfasdf",
+:     "content": "---\nblurb: \"\"\ncategories:\n- Miscellaneous\ndate: '2022-05-24T01:29:16'\nid: 29b7uo1rkxua\nstatus: scratch\ntype: post\n---\n\n\nThis is the second file\n\n;asdf \n\"\n(\n'\n\n\n"
+:   }
+: ]
+
+
+#+begin_src bash :results output
+  echo $(ksuid)
+  curl -s \
+      -H "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--root-key)" \
+      -X DELETE 'http://localhost:7575/indexes/grimoire/documents' 
+  cd "/Users/alan/workshop/grimoire-mode/samples/set-3"
+  cd "/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire"
+  for FILE in * 
+  do
+      ID_HASH=$(echo -n $FILE | md5)
+   echo $FILE
+   echo $ID_HASH
+   jq -Rsn --rawfile content $FILE --arg filename $FILE --arg id $ID_HASH -f "/Users/alan/workshop/grimoire-mode/meilisearch-utils/template.jq" > "/Users/alan/workshop/grimoire-mode/meilisearch-utils/tmp.json"
+      curl -s \
+          -X POST 'http://localhost:7575/indexes/grimoire/documents' \
+       -H "Authorization: Bearer $(security find-generic-password -w -a alan -s alan--meilisearch--scratchpad--root-key)" \
+       -H 'Content-Type: application/json' \
+       --data-binary "@/Users/alan/workshop/grimoire-mode/meilisearch-utils/tmp.json"
+   done
+#+end_src
+
+#+RESULTS:
+: 29bGjr9Yt0ITgIZzLeMkxBtjyw1
+: {"uid":41,"indexUid":"grimoire","status":"enqueued","type":"clearAll","enqueuedAt":"2022-05-24T06:41:49.087755Z"}file2.txt
+: 273604bfeef7126abe1f9bff1e45126c
+: {"uid":42,"indexUid":"grimoire","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T06:41:49.142488Z"}file3.txt
+: 113f6696d140c167070bcc5e24791f35
+: {"uid":43,"indexUid":"grimoire","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T06:41:49.189228Z"}file_name_1.txt
+: 201e562db8b9269fed3939c2fdb6fd25
+: {"uid":44,"indexUid":"grimoire","status":"enqueued","type":"documentAddition","enqueuedAt":"2022-05-24T06:41:49.236456Z"}
+
+
+This is just a test of java script to see
+about passing via name spaces 
+
+
+
+Create the output funciton 
+
+#+NAME: output-func
+#+begin_src js :results none
+  function output() {
+      console.log("the quick brown fox")
+  }
+#+end_src
+
+
+Use the output function 
+
+#+begin_src js :noweb yes :results output
+  <<output-func>>
+  output()
+#+end_src
+
+#+RESULTS:
+: the quick brown fox
+
+
+

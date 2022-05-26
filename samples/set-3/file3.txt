@@ -1,0 +1,17 @@
+#+ here
+
+---
+blurb: ""
+categories:
+- Miscellaneous
+date: '2022-05-24T01:29:51'
+id: 29b7zicvysbh
+status: scratch
+type: post
+---
+
+;;
+
+this is the third file
+
+
