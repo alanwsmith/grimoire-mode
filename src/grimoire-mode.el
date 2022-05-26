@@ -13,6 +13,19 @@ the helm buffer")
   "Adjusted to accont for the fact the results
 start on the second line")
 
+(defvar grimoire-mode-get-search-content-script
+  "/Users/alan/workshop/grimoire-mode/src/get-search-content"
+  "Path to the script that returns the content to populate
+the grimoire preview"
+  )
+
+(defvar grimoire-mode-get-search-results-script
+  "/Users/alan/workshop/grimoire-mode/src/get-search-results"
+  "Path to the script that returns the content to populate the
+results in the grimoire"
+  )
+
+
 (defun grimoire-mode-handle-selection (return-value)
   (message return-value)
   (if (string= return-value "Ready...")
@@ -38,7 +51,7 @@ start on the second line")
    nil
    grimoire-mode-buffer
    nil
-   "get-search-content"
+   grimoire-mode-get-search-content-script
    helm-pattern
    (number-to-string grimoire-mode-helm-buffer-line-adjusted)))
   (goto-char (point-min)))
@@ -54,7 +67,12 @@ start on the second line")
           :candidates-process
           (lambda ()
             (grimiore-mode-update-preview)
-            (start-process "search" nil "/bin/bash" "get-search-results" helm-pattern)))
+            (start-process
+             "search"
+             nil
+             "/bin/bash"
+             grimoire-mode-get-search-results-script
+             helm-pattern)))
         :buffer "*helm grimoire search*"))
   (setq helm-move-selection-after-hook nil)
   (kill-buffer grimoire-mode-buffer))
