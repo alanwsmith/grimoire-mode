@@ -79,13 +79,14 @@ def update_files():
       root_dir='/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire'
   )
 
+
   documents = []
 
   print("Prepping Documents")
   for file_item in file_list:
       with open(file_item['full_path'], 'r', encoding='utf-8', errors='ignore') as _in:
           if file_item['extension'] == 'txt':
-              # content = json.dumps(json.dumps(_in.read()))
+
               # print(content)
               new_item = {
                   "id": string_to_md5(file_item['name_with_extension']),

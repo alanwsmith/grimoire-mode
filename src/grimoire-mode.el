@@ -47,7 +47,7 @@ results in the grimoire"
   (switch-to-buffer grimoire-mode-buffer)
   (erase-buffer)
   (if (string= helm-pattern "")
-      (insert "-- Grimoire Mode --")
+      (message "No file selected")
     (call-process
    "/bin/bash"
    nil
@@ -90,5 +90,4 @@ results in the grimoire"
   )
 
 
-(add-hook 'after-save-hook 'grimoire-mode-update-search-index)
 (global-set-key [f5] 'grimoire-mode-search-v0.10)
