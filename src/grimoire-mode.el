@@ -47,7 +47,7 @@ results in the grimoire"
   (switch-to-buffer grimoire-mode-buffer)
   (erase-buffer)
   (if (string= helm-pattern "")
-      (insert "-- Grimoire Mode --")
+      (message "No file selected")
     (call-process
    "/bin/bash"
    nil
