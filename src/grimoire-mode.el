@@ -9,7 +9,7 @@
   "Storage for the current line position of
 the helm buffer")
 
-(defvar grimiore-mode-helm-buffer-line-adjusted 0
+(defvar grimoire-mode-helm-buffer-line-adjusted 0
   "Adjusted to accont for the fact the results
 start on the second line")
 
@@ -28,15 +28,17 @@ results in the grimoire"
 
 (defun grimoire-mode-handle-selection (return-value)
   (message return-value)
+  (if (string= return-value nil)
+      (message "No file selected.")
   (if (string= return-value "Ready...")
       (message "No file selected.")
     (progn
       (message (concat "Loading: " return-value) )
       (find-file(concat "/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire/" return-value))
       (org-mode)
-      )))
+      ))))
 
-(defun grimiore-mode-update-preview ()
+(defun grimoire-mode-update-preview ()
   (setq grimoire-mode-helm-buffer-line
         (with-current-buffer helm-buffer (string-to-number (format-mode-line "%l"))))
   (setq grimoire-mode-helm-buffer-line-adjusted
@@ -59,14 +61,14 @@ results in the grimoire"
 
 (defun grimoire-mode-search-v0.10 ()
   (interactive)
-  (setq helm-move-selection-after-hook 'grimiore-mode-update-preview)
+  (setq helm-move-selection-after-hook 'grimoire-mode-update-preview)
   (switch-to-buffer grimoire-mode-buffer)
   (org-mode)
   (grimoire-mode-handle-selection(helm :sources
         (helm-build-async-source "Grimoire Search"
           :candidates-process
           (lambda ()
-            (grimiore-mode-update-preview)
+            (grimoire-mode-update-preview)
             (start-process
              "search"
              nil
@@ -77,4 +79,16 @@ results in the grimoire"
   (setq helm-move-selection-after-hook nil)
   (kill-buffer grimoire-mode-buffer))
 
+(defun grimoire-mode-update-search-index ()
+  "Function to run script that updates the search index"
+  (message "Updating Index")
+  (start-process "uploader"
+                 nil
+                 "/opt/homebrew/bin/python3"
+                 "/Users/alan/workshop/grimoire-mode/meilisearch-utils/update.py"
+                 )
+  )
+
+
+(add-hook 'after-save-hook 'grimoire-mode-update-search-index)
 (global-set-key [f5] 'grimoire-mode-search-v0.10)

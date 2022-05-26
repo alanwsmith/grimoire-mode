@@ -96,7 +96,7 @@ def update_files():
               documents.append(new_item)
 
   print("Deleting index")
-  response_delete = client.index(index_name).delete()
+  response_delete = client.index(index_name).delete_all_documents()
 
   print("Uploading data")
   response_upload = client.index(index_name).add_documents(documents)
