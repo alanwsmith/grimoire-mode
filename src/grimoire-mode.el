@@ -13,14 +13,21 @@ the helm buffer")
   "Adjusted to accont for the fact the results
 start on the second line")
 
-(defun grimiore-mode-update-preview ()
+(defun grimoire-mode-handle-selection (return-value)
+  (message return-value)
+  (if (string= return-value "Ready...")
+      (message "No file selected.")
+    (progn
+      (message (concat "Loading: " return-value) )
+      (find-file(concat "/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire/" return-value))
+      (org-mode)
+      )))
 
+(defun grimiore-mode-update-preview ()
   (setq grimoire-mode-helm-buffer-line
         (with-current-buffer helm-buffer (string-to-number (format-mode-line "%l"))))
-
   (setq grimoire-mode-helm-buffer-line-adjusted
         (max (- grimoire-mode-helm-buffer-line 2) 0) )
-
   (message (number-to-string grimoire-mode-helm-buffer-line))
   (switch-to-buffer grimoire-mode-buffer)
   (erase-buffer)
@@ -42,13 +49,13 @@ start on the second line")
   (setq helm-move-selection-after-hook 'grimiore-mode-update-preview)
   (switch-to-buffer grimoire-mode-buffer)
   (org-mode)
-  (helm :sources
+  (grimoire-mode-handle-selection(helm :sources
         (helm-build-async-source "Grimoire Search"
           :candidates-process
           (lambda ()
             (grimiore-mode-update-preview)
             (start-process "search" nil "/bin/bash" "get-search-results" helm-pattern)))
-        :buffer "*helm grimoire search*")
+        :buffer "*helm grimoire search*"))
   (setq helm-move-selection-after-hook nil)
   (kill-buffer grimoire-mode-buffer))
 
