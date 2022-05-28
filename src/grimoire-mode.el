@@ -2,6 +2,11 @@
 (require 'helm-lib)
 (require 'helm-utils)
 
+(defconst grimiore-mode-directory
+  "/Users/alan/Grimoire"
+  "The storage directory for the Grimoire files"
+  )
+
 (defconst grimoire-mode-buffer "*Grimoire*"
   "Name of the Grimoire buffer")
 
@@ -25,7 +30,6 @@ the grimoire preview"
 results in the grimoire"
   )
 
-
 (defun grimoire-mode-handle-selection (return-value)
   (message return-value)
   (if (string= return-value nil)
@@ -34,7 +38,7 @@ results in the grimoire"
       (message "No file selected.")
     (progn
       (message (concat "Loading: " return-value) )
-      (find-file(concat "/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire/" return-value))
+      (find-file(concat grimoire-mode-directory "/" return-value))
       (org-mode)
       ))))
 
@@ -79,15 +83,3 @@ results in the grimoire"
   (setq helm-move-selection-after-hook nil)
   (kill-buffer grimoire-mode-buffer))
 
-(defun grimoire-mode-update-search-index ()
-  "Function to run script that updates the search index"
-  (message "Updating Index")
-  (start-process "uploader"
-                 nil
-                 "/opt/homebrew/bin/python3"
-                 "/Users/alan/workshop/grimoire-mode/meilisearch-utils/update.py"
-                 )
-  )
-
-
-(global-set-key [f5] 'grimoire-mode-search-v0.10)

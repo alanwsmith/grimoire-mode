@@ -60,50 +60,48 @@ def list_dir(*, root_dir, sub_dir=''):
 
 def update_files():
 
-  domain = "http://localhost:7700"
-  admin_key = keyring.get_password(
+    domain = "http://localhost:7700"
+    admin_key = keyring.get_password(
       'alan--meilisearch--scratchpad--admin-key',
       'alan'
-  )
+    )
 
-  index_name = 'grimoire'
+    index_name = 'grimoire'
 
-  client = meilisearch.Client(
+    client = meilisearch.Client(
       domain,
       admin_key
-  )
+    )
 
 
-  file_list = list_dir(
+    file_list = list_dir(
       # root_dir='/Users/alan/workshop/grimoire-mode/samples/set-3'
-      root_dir='/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire'
-  )
+      root_dir='/Users/alan/Grimoire'
+    )
 
 
-  documents = []
+    documents = []
 
-  print("Prepping Documents")
-  for file_item in file_list:
-      with open(file_item['full_path'], 'r', encoding='utf-8', errors='ignore') as _in:
-          if file_item['extension'] == 'txt':
+    print("Prepping Documents")
+    for file_item in file_list:
+        if file_item['extension'].lower() == "txt":
+            with open(file_item['full_path'], 'r', encoding='utf-8', errors='ignore') as _in:
+                if file_item['extension'] == 'txt':
+                    # print(content)
+                    new_item = {
+                        "id": string_to_md5(file_item['name_with_extension']),
+                        "filename": file_item['name_with_extension'],
+                        "content": _in.read()
+                    }
+                    documents.append(new_item)
 
-              # print(content)
-              new_item = {
-                  "id": string_to_md5(file_item['name_with_extension']),
-                  "filename": file_item['name_with_extension'],
-                  # "content": content
-                  "content": _in.read()
-              }
-              documents.append(new_item)
+    print("Deleting index")
+    response_delete = client.index(index_name).delete_all_documents()
 
-  print("Deleting index")
-  response_delete = client.index(index_name).delete_all_documents()
+    print("Uploading data")
+    response_upload = client.index(index_name).add_documents(documents)
 
-  print("Uploading data")
-  response_upload = client.index(index_name).add_documents(documents)
-
-  print(response_upload)
-
+    print(response_upload)
 
 if __name__ == "__main__":
     print("Starting update")
