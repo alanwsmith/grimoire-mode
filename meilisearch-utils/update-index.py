@@ -3,6 +3,7 @@
 import hashlib
 import keyring
 import meilisearch
+import os
 import sys
 
 def string_to_md5(string):
@@ -13,33 +14,36 @@ def do_update():
     if (len(sys.argv) > 1):
         file_path = sys.argv[1]
 
-        with open(file_path, 'r', encoding='utf-8', errors='ignore') as _in:
+        file_extension = os.path.splitext(file_path).lower()
+        if file_extension == ".txt":
 
-            domain = "http://localhost:7700"
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as _in:
 
-            admin_key = keyring.get_password(
-                'alan--meilisearch--scratchpad--admin-key',
-                'alan'
-            )
+                domain = "http://localhost:7700"
 
-            index_name = 'grimoire'
+                admin_key = keyring.get_password(
+                    'alan--meilisearch--scratchpad--admin-key',
+                    'alan'
+                )
 
-            client = meilisearch.Client(
-                domain,
-                admin_key
-            )
+                index_name = 'grimoire'
 
-            filename = file_path.split('/')[-1]
-            id_string = string_to_md5(file_path)
-            content = _in.read()
+                client = meilisearch.Client(
+                    domain,
+                    admin_key
+                )
 
-            payload = {
-                "id": id_string,
-                "filename": filename,
-                "content": content
-            }
+                filename = file_path.split('/')[-1]
+                id_string = string_to_md5(file_path)
+                content = _in.read()
 
-            response_upload = client.index(index_name).add_documents(payload)
+                payload = {
+                    "id": id_string,
+                    "filename": filename,
+                    "content": content
+                }
+
+                response_upload = client.index(index_name).add_documents(payload)
 
 
 if __name__ == "__main__":
