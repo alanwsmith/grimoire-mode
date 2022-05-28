@@ -2,10 +2,6 @@
 (require 'helm-lib)
 (require 'helm-utils)
 
-(defconst grimiore-mode-directory
-  "/Users/alan/Grimoire"
-  "The storage directory for the Grimoire files"
-  )
 
 (defconst grimoire-mode-buffer "*Grimoire*"
   "Name of the Grimoire buffer")
