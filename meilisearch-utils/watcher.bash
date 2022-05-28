@@ -2,6 +2,6 @@
 
 fswatch -0 "/Users/alan/Grimoire" | while read -d "" event
   do 
-    echo "$event"
+    # echo "$event"
     /Users/alan/workshop/grimoire-mode/meilisearch-utils/update-index.py "$event"
   done

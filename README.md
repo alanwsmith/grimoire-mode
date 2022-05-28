@@ -12,8 +12,10 @@ A Grimoire For Emacs Org-mode
 
 ## TODO
 
+- [] - Open file directory for preview instead of via return from meilisearch
 - [] - Pop out to a second window
 - [] - Make new files 
+- [] - Put in check to make sure Grimoire directory exists
 - [] - Examine switching to helm-follow instead of custom function to do preview
 - [] - Setup the watcher upload script skip directories and files that shouldn't be published (e.g. tmp files)
 - [] - Only update files that changed in the search index
