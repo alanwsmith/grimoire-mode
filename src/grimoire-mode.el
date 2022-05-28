@@ -30,7 +30,6 @@ the grimoire preview"
 results in the grimoire"
   )
 
-
 (defun grimoire-mode-handle-selection (return-value)
   (message return-value)
   (if (string= return-value nil)
@@ -84,15 +83,3 @@ results in the grimoire"
   (setq helm-move-selection-after-hook nil)
   (kill-buffer grimoire-mode-buffer))
 
-;; (defun grimoire-mode-update-search-index ()
-;;   "Function to run script that updates the search index"
-;;   (message "Updating Index")
-;;   (start-process "uploader"
-;;                  nil
-;;                  "/opt/homebrew/bin/python3"
-;;                  "/Users/alan/workshop/grimoire-mode/meilisearch-utils/update.py"
-;;                  )
-;;   )
-
-
-(global-set-key [f5] 'grimoire-mode-search-v0.10)
