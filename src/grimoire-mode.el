@@ -2,6 +2,11 @@
 (require 'helm-lib)
 (require 'helm-utils)
 
+(defconst grimiore-mode-directory
+  "/Users/alan/Grimoire"
+  "The storage directory for the Grimoire files"
+  )
+
 (defconst grimoire-mode-buffer "*Grimoire*"
   "Name of the Grimoire buffer")
 
@@ -34,7 +39,7 @@ results in the grimoire"
       (message "No file selected.")
     (progn
       (message (concat "Loading: " return-value) )
-      (find-file(concat "/Users/alan/Library/Mobile Documents/com~apple~CloudDocs/Grimoire/" return-value))
+      (find-file(concat grimoire-mode-directory "/" return-value))
       (org-mode)
       ))))
 
