@@ -31,13 +31,6 @@ results in the grimoire"
 
   (switch-to-buffer grimoire-mode-buffer)
 
-  ;; (message (number-to-string helm-follow-input-idle-delay))
-  ;; (message (number-to-string tooltip-delay))
-  ;; (message (number-to-string idle-update-delay))
-  ;; (message (number-to-string helm-input-idle-delay))
-  ;; (message (number-to-string helm-idle-delay))
-  ;; (message (number-to-string helm-cycle-result-delay))
-
   (if (string= candidate "Ready...")
       (message "No file selected.")
     (find-file(concat grimoire-mode-directory "/" candidate))
@@ -62,7 +55,6 @@ results in the grimoire"
   )
 
 (defun grimoire-mode-update-preview ()
-
   ;; (setq grimoire-mode-helm-buffer-line
   ;;       (with-current-buffer helm-buffer (string-to-number (format-mode-line "%l"))))
   ;; (setq grimoire-mode-helm-buffer-line-adjusted
@@ -81,38 +73,31 @@ results in the grimoire"
   ;;  helm-pattern
   ;;  (number-to-string grimoire-mode-helm-buffer-line-adjusted)))
   ;; (goto-char (point-min))
-
-
   )
 
 
-;; TODO: Figure out if you need to set this:
-;; (setq helm-follow-input-idle-delay 0.5)
-;; Looks like it's null to start. 
-
-;; TODO: See about adding :cleanup for
-;; closing things down
-
-;; TODO: Look at :nohighlight
-
-;; NOTE: note sure if :follow-delay is having
-;; any effect. 
-
+(defun grimiore-mode-preview (candidate)
+  (switch-to-buffer grimoire-mode-buffer)
+  (erase-buffer)
+  (if (string= candidate "Ready...")
+      (message "No file selected.")
+    (find-file(concat grimoire-mode-directory "/" candidate))
+    (insert-into-buffer grimoire-mode-buffer)
+    (kill-buffer (current-buffer))
+    )
+   (goto-char (point-min))
+  )
 
 (defun grimoire-mode-search-v0.10 ()
   (interactive)
-  ; (setq helm-move-selection-after-hook 'grimoire-mode-update-preview)
-  (switch-to-buffer grimoire-mode-buffer)
-
-  (org-mode)
   (grimoire-mode-handle-selection(helm :sources
         (helm-build-async-source "Grimoire Search"
           :follow 1
           :follow-delay 0.001
-          :persistent-action 'grimiore-mode-test 
+          :persistent-action 'grimiore-mode-preview
           :candidates-process
           (lambda ()
-            (grimoire-mode-update-preview)
+            ; (grimoire-mode-update-preview)
             (start-process
              "search"
              nil
@@ -120,6 +105,5 @@ results in the grimoire"
              grimoire-mode-get-search-results-script
              helm-pattern)))
         :buffer "*helm grimoire search*"))
-  ; (setq helm-move-selection-after-hook nil)
   (kill-buffer grimoire-mode-buffer))
 
