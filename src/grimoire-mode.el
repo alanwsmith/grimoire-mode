@@ -27,16 +27,13 @@ the grimoire preview"
 results in the grimoire"
   )
 
-(defun grimiore-mode-test (candidate)
-
-  (switch-to-buffer grimoire-mode-buffer)
-
-  (if (string= candidate "Ready...")
-      (message "No file selected.")
-    (find-file(concat grimoire-mode-directory "/" candidate))
-  )
-
-  )
+;; (defun grimiore-mode-test (candidate)
+;;   (switch-to-buffer grimoire-mode-buffer)
+;;   (if (string= candidate "Ready...")
+;;       (message "No file selected.")
+;;     (find-file(concat grimoire-mode-directory "/" candidate))
+;;   )
+;;   )
 
 (defun grimoire-mode-handle-selection (return-value)
 
@@ -54,38 +51,23 @@ results in the grimoire"
 
   )
 
-(defun grimoire-mode-update-preview ()
-  ;; (setq grimoire-mode-helm-buffer-line
-  ;;       (with-current-buffer helm-buffer (string-to-number (format-mode-line "%l"))))
-  ;; (setq grimoire-mode-helm-buffer-line-adjusted
-  ;;       (max (- grimoire-mode-helm-buffer-line 2) 0) )
-  ;; ;; (message (number-to-string grimoire-mode-helm-buffer-line))
-  ;; (switch-to-buffer grimoire-mode-buffer)
-  ;; (erase-buffer)
-  ;; (if (string= helm-pattern "")
-  ;;     (message "No file selected")
-  ;;   (call-process
-  ;;  "/bin/bash"
-  ;;  nil
-  ;;  grimoire-mode-buffer
-  ;;  nil
-  ;;  grimoire-mode-get-search-content-script
-  ;;  helm-pattern
-  ;;  (number-to-string grimoire-mode-helm-buffer-line-adjusted)))
-  ;; (goto-char (point-min))
-  )
 
-
-(defun grimiore-mode-preview (candidate)
-  (switch-to-buffer grimoire-mode-buffer)
-  (erase-buffer)
+(defun grimiore-mode-handle-preview (candidate)
   (if (string= candidate "Ready...")
-      (message "No file selected.")
-    (find-file(concat grimoire-mode-directory "/" candidate))
-    (insert-into-buffer grimoire-mode-buffer)
-    (kill-buffer (current-buffer))
+      (progn
+        (switch-to-buffer grimoire-mode-buffer)
+        (erase-buffer)
+        )
+    (progn
+      (switch-to-buffer grimoire-mode-buffer)
+      (erase-buffer)
+      (find-file(concat grimoire-mode-directory "/" candidate))
+      (insert-into-buffer grimoire-mode-buffer)
+      (kill-buffer (current-buffer))
+      (goto-char (point-min))
+      (org-mode)
     )
-   (goto-char (point-min))
+    )
   )
 
 (defun grimoire-mode-search-v0.10 ()
@@ -94,10 +76,9 @@ results in the grimoire"
         (helm-build-async-source "Grimoire Search"
           :follow 1
           :follow-delay 0.001
-          :persistent-action 'grimiore-mode-preview
+          :persistent-action 'grimiore-mode-handle-preview
           :candidates-process
           (lambda ()
-            ; (grimoire-mode-update-preview)
             (start-process
              "search"
              nil
