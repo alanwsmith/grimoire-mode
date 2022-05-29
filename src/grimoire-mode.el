@@ -3,15 +3,10 @@
 (require 'helm-utils)
 
 ;; See .spacemacs for setting grimoire-mode-directory
+;; and grimoire-mode-get-search-results-script
 
 (defconst grimoire-mode-buffer "*Grimoire*"
   "Name of the Grimoire buffer")
-
-(defvar grimoire-mode-get-search-results-script
-  "/Users/alan/workshop/grimoire-mode/src/get-search-results"
-  "Path to the script that returns the content to populate the
-results in the grimoire"
-  )
 
 (defun grimoire-mode-handle-selection (selection)
   (unless (string= selection nil)
@@ -23,7 +18,6 @@ results in the grimoire"
       )
     )
   )
-
 
 (defun grimiore-mode-handle-preview (candidate)
   (if (string= candidate "Ready...")
