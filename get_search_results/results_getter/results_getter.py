@@ -1,3 +1,5 @@
+import re
+
 class ResultsGetter:
 
     def __init__(self):
@@ -6,19 +8,13 @@ class ResultsGetter:
     def search(self, term):
         return "Ready..."
 
-    def filtered_response(self):
-
-
-        return_value = []
+    def filtered_response(self, term):
+        return_list = []
+        secondary_return_list = []
         for candidate in self.meilisearch_response['hits']:
-            return_value.append(candidate['filename'])
-            # print(candidate)
-
-
-        # return_value = [
-        #     'example- a.txt',
-        #     'example- b.txt',
-        #     'widget- c.txt'
-        # ]
-
-        return return_value 
+            if re.match(term, candidate['filename']):
+                return_list.append(candidate['filename'])
+            else:
+                secondary_return_list.append(candidate['filename'])
+        return_list.extend(secondary_return_list)
+        return return_list

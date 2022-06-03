@@ -44,5 +44,6 @@ class ResultsGetterTest(unittest.TestCase):
 
 if __name__ == "__main__":
     print(datetime.now())
+    print("\n\n")
     unittest.main()
 
