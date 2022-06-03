@@ -30,8 +30,7 @@ class ResultsGetterTest(unittest.TestCase):
             ]
         }
         expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
-        result = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
-        result = rg.filtered_response()
+        result = rg.filtered_response('example-')
         self.assertEqual(expect, result)
 
 
