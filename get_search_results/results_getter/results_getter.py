@@ -43,3 +43,23 @@ class ResultsGetter:
 
     def finalize_results(self):
         self.results = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
+
+        # self.results = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
+
+    # def filtered_response_dev(self, term):
+    #     # return_list = ['widget- c.txt', 'example- b.txt'] 
+    #     # return return_list
+    #     return_list = []
+    #     secondary_return_list = []
+    #     for candidate in self.meilisearch_response['hits']:
+    #         is_private = False
+    #         for private_term in self.nonce_words_to_exclude:
+    #             if private_term in candidate['filename']:
+    #                 is_private = True
+    #         if is_private == False:
+    #             if re.match(term, candidate['filename']):
+    #                 return_list.append(candidate['filename'])
+    #             else:
+    #                 secondary_return_list.append(candidate['filename'])
+    #     return_list.extend(secondary_return_list)
+    #     return return_list
