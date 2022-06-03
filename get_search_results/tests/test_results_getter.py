@@ -74,23 +74,32 @@ class ResultsGetterTest(unittest.TestCase):
         result = rg.search("")
         self.assertEqual(expect, result)
 
-    # def test_basic_results(self):
-    #     rg.meilisearch_response = {
-    #         "hits": [
-    #             { "filename": "example- a.txt"},
-    #             { "filename": "example- b.txt"},
-    #             { "filename": "widget- c.txt"}
-    #         ]
-    #     }
-    #     expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
-    #     result = rg.filtered_response('example-')
-    #     self.assertEqual(expect, result)
+    def test_basic_results(self):
+        rg.meilisearch_response = {
+            "hits": [
+                { "filename": "example- a.txt"},
+                { "filename": "example- b.txt"},
+                { "filename": "widget- c.txt"}
+            ]
+        }
+        expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
+        result = rg.filtered_response('example-')
+        self.assertEqual(expect, result)
 
     def test_sort_results(self):
         rg.nonce = 'example-'
         rg.results = [ 'example- a.txt', 'widget- c.txt', 'example- b.txt' ]
         rg.sort_results()
         expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
+        result = rg.results
+        self.assertEqual(expect, result)
+
+
+    def test_sort_results_with_empty_nonce(self):
+        rg.nonce = ''
+        rg.results = [ 'example- a.txt', 'widget- c.txt', 'example- b.txt' ]
+        rg.sort_results()
+        expect = ['example- a.txt', 'widget- c.txt', 'example- b.txt']
         result = rg.results
         self.assertEqual(expect, result)
 

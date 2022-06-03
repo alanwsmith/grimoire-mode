@@ -14,7 +14,7 @@ class ResultsGetter:
         self.return_list = []
         self.results = []
         self.exclusions = []
-        self.nonce = None
+        self.nonce = ''
 
     def search(self, term):
         return "Ready..."
