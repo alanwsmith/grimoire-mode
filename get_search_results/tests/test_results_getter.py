@@ -34,6 +34,18 @@ class ResultsGetterTest(unittest.TestCase):
         self.assertEqual(expected, results)
 
 
+    def test_integration_empty_search_term(self):
+        rg.search_term = ''
+        rg.exclusions = ['private-']
+        rg.meilisearch_response = {
+            'hits': []
+        }
+        rg.generate_results()
+        expected = ['Ready...']
+        results = rg.results
+        self.assertEqual(expected, results)
+
+
     def test_load_nonce(self):
         rg.search_term = 'example- wibble wobble'
         rg.load_nonce()

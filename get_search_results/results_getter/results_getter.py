@@ -69,10 +69,13 @@ class ResultsGetter:
 
 
     def generate_results(self):
-        self.load_nonce()
-        self.parse_meilisearch_results()
-        self.sort_results()
-        self.remove_exclusions()
+        if self.search_term == '':
+            self.results = ['Ready...']
+        else:
+            self.load_nonce()
+            self.parse_meilisearch_results()
+            self.sort_results()
+            self.remove_exclusions()
 
         # TODO: remove the hard coded test stub here
         # self.results = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
