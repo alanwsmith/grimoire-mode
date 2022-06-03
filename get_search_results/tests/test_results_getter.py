@@ -87,32 +87,13 @@ class ResultsGetterTest(unittest.TestCase):
     #     self.assertEqual(expect, result)
 
     def test_sort_results(self):
-        # given
         rg.nonce = 'example-'
-        rg.results = [
-            'example- a.txt',
-            'widget- c.txt',
-            'example- b.txt'
-        ]
-        # when
+        rg.results = [ 'example- a.txt', 'widget- c.txt', 'example- b.txt' ]
         rg.sort_results()
-        # then
         expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
         result = rg.results
         self.assertEqual(expect, result)
 
-
-        # rg.meilisearch_response = {
-        #     "hits": [
-        #         { "filename": "example- a.txt"},
-        #         { "filename": "widget- c.txt"},
-        #         { "filename": "example- b.txt"}
-        #     ]
-        # }
-
-        # expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
-        # result = rg.filtered_response('example-')
-        # self.assertEqual(expect, result)
 
     def test_remove_exclusions(self):
         rg.results = [
