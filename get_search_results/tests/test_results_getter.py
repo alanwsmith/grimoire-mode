@@ -46,6 +46,22 @@ class ResultsGetterTest(unittest.TestCase):
         result = rg.filtered_response('example-')
         self.assertEqual(expect, result)
 
+    def test_remove_private_files(self):
+        # given
+        rg.results = [
+            'example- a.txt',
+            'private- b.txt',
+            'widget- c.txt'
+        ]
+        rg.tokens_to_exclude = ['private-']
+        # when
+        rg.remove_exclusions()
+        # then
+        expect = ['example- a.txt', 'widget- c.txt']
+        result = rg.results
+        self.assertEqual(expect, result)
+
+
 
 if __name__ == "__main__":
     print(datetime.now())
