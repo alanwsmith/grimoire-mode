@@ -39,6 +39,18 @@ class ResultsGetterTest(unittest.TestCase):
 
 
 
+    def test_grouping_results(self):
+        # Group all the nonce words up top
+        rg.meilisearch_response = {
+            "hits": [
+                { "filename": "example- a.txt"},
+                { "filename": "widget- c.txt"},
+                { "filename": "example- b.txt"}
+            ]
+        }
+        expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
+        result = rg.filtered_response('example-')
+        self.assertEqual(expect, result)
 
 
 if __name__ == "__main__":
