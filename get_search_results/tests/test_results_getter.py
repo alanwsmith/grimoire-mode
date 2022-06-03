@@ -96,16 +96,13 @@ class ResultsGetterTest(unittest.TestCase):
         # self.assertEqual(expect, result)
 
     def test_remove_exclusions(self):
-        # given
         rg.results = [
             'example- a.txt',
             'private- b.txt',
             'widget- c.txt'
         ]
-        rg.tokens_to_exclude = ['private-']
-        # when
+        rg.exclusions = ['private-']
         rg.remove_exclusions()
-        # then
         expect = ['example- a.txt', 'widget- c.txt']
         result = rg.results
         self.assertEqual(expect, result)

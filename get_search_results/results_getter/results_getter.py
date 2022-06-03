@@ -13,7 +13,7 @@ class ResultsGetter:
         self.meilisearch_response = {}
         self.return_list = []
         self.results = []
-        self.tokens_to_exclude = []
+        self.exclusions = []
         self.nonce = None
 
     def search(self, term):
@@ -44,7 +44,7 @@ class ResultsGetter:
         filtered_results = []
         for item in self.results:
             keep_it = True
-            for private_term in self.tokens_to_exclude:
+            for private_term in self.exclusions:
                 if private_term in item:
                     keep_it = False
             if keep_it == True:
