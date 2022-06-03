@@ -46,32 +46,47 @@ class ResultsGetterTest(unittest.TestCase):
         result = rg.search("")
         self.assertEqual(expect, result)
 
-    def test_basic_results(self):
-        rg.meilisearch_response = {
-            "hits": [
-                { "filename": "example- a.txt"},
-                { "filename": "example- b.txt"},
-                { "filename": "widget- c.txt"}
-            ]
-        }
+    # def test_basic_results(self):
+    #     rg.meilisearch_response = {
+    #         "hits": [
+    #             { "filename": "example- a.txt"},
+    #             { "filename": "example- b.txt"},
+    #             { "filename": "widget- c.txt"}
+    #         ]
+    #     }
+    #     expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
+    #     result = rg.filtered_response('example-')
+    #     self.assertEqual(expect, result)
+
+    def test_sort_results(self):
+        # given
+        rg.nonce = 'example-'
+        rg.results = [
+            'example- a.txt',
+            'widget- c.txt',
+            'example- b.txt'
+        ]
+        # when
+        rg.sort_results()
+        # then
         expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
-        result = rg.filtered_response('example-')
+        result = rg.results
         self.assertEqual(expect, result)
 
-    def test_grouping_results(self):
-        # Group all the nonce words up top
-        rg.meilisearch_response = {
-            "hits": [
-                { "filename": "example- a.txt"},
-                { "filename": "widget- c.txt"},
-                { "filename": "example- b.txt"}
-            ]
-        }
-        expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
-        result = rg.filtered_response('example-')
-        self.assertEqual(expect, result)
 
-    def test_remove_private_files(self):
+        # rg.meilisearch_response = {
+        #     "hits": [
+        #         { "filename": "example- a.txt"},
+        #         { "filename": "widget- c.txt"},
+        #         { "filename": "example- b.txt"}
+        #     ]
+        # }
+
+        # expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
+        # result = rg.filtered_response('example-')
+        # self.assertEqual(expect, result)
+
+    def test_remove_exclusions(self):
         # given
         rg.results = [
             'example- a.txt',
@@ -85,6 +100,30 @@ class ResultsGetterTest(unittest.TestCase):
         expect = ['example- a.txt', 'widget- c.txt']
         result = rg.results
         self.assertEqual(expect, result)
+
+
+
+
+
+
+    # def test_hide_private_results(self):
+    #     # remove private nonce words from results
+    #     # by default
+    #     rg.meilisearch_response = {
+    #         "hits": [
+    #             { "filename": "private- a.txt"},
+    #             { "filename": "widget- c.txt"},
+    #             { "filename": "example- b.txt"}
+    #         ]
+    #     }
+    #     rg.nonce_words_to_exclude = ['private-']
+    #     expect = ['widget- c.txt', 'example- b.txt']
+    #     result = rg.filtered_response_dev('foo-')
+    #     self.assertEqual(expect, result)
+
+
+
+
 
 
 

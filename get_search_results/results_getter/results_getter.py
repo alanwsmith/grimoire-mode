@@ -43,6 +43,17 @@ class ResultsGetter:
                 filtered_results.append(item)
         self.results = filtered_results
 
+    def sort_results(self):
+        primary_list = []
+        secondary_list = []
+        for result in self.results:
+            if re.match(self.nonce, result):
+                primary_list.append(result)
+            else:
+                secondary_list.append(result)
+        self.results = primary_list + secondary_list
+
+
     def finalize_results(self):
         self.results = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
 
