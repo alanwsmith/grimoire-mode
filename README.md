@@ -12,6 +12,9 @@ A Grimoire For Emacs Org-mode
 
 ## TODO
 
+- [] - Add ability to scroll preview file via hotkeys 
+- [] - Add ability to scroll list of candiates via j/k with a modifier
+- [] - Fix issue where if buffer has been edited and gets reference in the preview it asks if you want to close it. 
 - [] - Open file directory for preview instead of via return from meilisearch
 - [] - Pop out to a second window
 - [] - Make new files 
