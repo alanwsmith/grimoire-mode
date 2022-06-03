@@ -38,7 +38,25 @@ class ResultsGetterTest(unittest.TestCase):
 
 
 
+    def test_parse_meilisearch_results(self):
 
+        ### GIVEN ###
+        rg.meilisearch_response = {
+            'hits': [
+                { 'filename': 'example- a.txt'},
+                { 'filename': 'widget- b.txt'},
+                { 'filename': 'private- c.txt'},
+                { 'filename': 'example- d.txt'}
+            ]
+        }
+
+        ### WHEN ###
+        rg.parse_meilisearch_results()
+
+        ### THEN ###
+        expected = ['example- a.txt', 'widget- b.txt', 'private- c.txt', 'example- d.txt']
+        results = rg.results
+        self.assertEqual(expected, results)
 
 
     def test_ready_for_no_results(self):

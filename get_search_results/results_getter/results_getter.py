@@ -32,6 +32,13 @@ class ResultsGetter:
         return_list.extend(secondary_return_list)
         return return_list
 
+    def parse_meilisearch_results(self):
+        parsed_results = []
+        for hit in self.meilisearch_response['hits']:
+            parsed_results.append(hit['filename'])
+        self.results = parsed_results
+
+
     def remove_exclusions(self):
         filtered_results = []
         for item in self.results:
