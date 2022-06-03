@@ -16,8 +16,8 @@ class ResultsGetterTest(unittest.TestCase):
         global rg
         rg = ResultsGetter()
 
-    def test_integration_basic(self):
-        # given
+
+    def test_integration_finalize_results(self):
         rg.search_term = 'example- wibble wobble'
         rg.meilisearch_response = {
             'hits': [
@@ -27,20 +27,15 @@ class ResultsGetterTest(unittest.TestCase):
                 'example- d.txt'
             ]
         }
-
-        # when
         rg.finalize_results()
-
-        # then
         expected = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
         results = rg.results
         self.assertEqual(expected, results)
 
 
 
-    def test_parse_meilisearch_results(self):
 
-        ### GIVEN ###
+    def test_parse_meilisearch_results(self):
         rg.meilisearch_response = {
             'hits': [
                 { 'filename': 'example- a.txt'},
@@ -49,11 +44,7 @@ class ResultsGetterTest(unittest.TestCase):
                 { 'filename': 'example- d.txt'}
             ]
         }
-
-        ### WHEN ###
         rg.parse_meilisearch_results()
-
-        ### THEN ###
         expected = ['example- a.txt', 'widget- b.txt', 'private- c.txt', 'example- d.txt']
         results = rg.results
         self.assertEqual(expected, results)
