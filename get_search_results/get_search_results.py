@@ -35,7 +35,9 @@ headers = {
 }
 
 data = {
-    'q': search_term 
+    'q': search_term,
+    'limit': 40,
+    'attributesToRetrieve': [ 'filename' ]
 }
 
 results_with_nonce = []
@@ -47,19 +49,27 @@ match = re.search(f"^(\w+-)\s", search_term)
 
 response = requests.post(url, headers=headers, json=data)
 
-
 if match:
     # pull on the matches that hit the nonce word first
     for item in response.json()['hits']:
         if re.search(f"^{match[1]}", item['filename']):
             results_with_nonce.append(item['filename'])
         else:
-            results_without_nonce.append(item['filename'])
+            # skip `history- ` files becauce they are generally
+            # not useful. They can still be searching for directly
+            # with the `history- ` nonce
+            if not re.search(f"^hstry- ", item['filename']) and not re.search(f"^slf- ", item['filename']):
+                results_without_nonce.append(item['filename'])
 else:
     for item in response.json()['hits']:
         # add to 'without' becuse of the way
         # we use it to extend next
-        results_without_nonce.append(item['filename'])
+        # leaving history stuff in here for now. becuase
+        # everything would get filtered out if there
+        # weren't any results
+        # if not re.search(f"^history- ", item['filename']):
+        if not re.search(f"^hstry- ", item['filename']) and not re.search(f"^slf- ", item['filename']):
+            results_without_nonce.append(item['filename'])
 
 # combine the lists
 results_with_nonce.extend(results_without_nonce)
@@ -72,18 +82,3 @@ if search_term == "":
     print("Ready...")
 else:
     print("\n".join(results_with_nonce))
-
-
-# print(results_with_nonce)
-# print(results_without_nonce)
-
-
-    # print(matches[1])
-
-
-# if response.status_code == 200:
-#     print(json.dumps(response.json(), indent=2, sort_keys=True))
-# else:
-#     print()
-
-
