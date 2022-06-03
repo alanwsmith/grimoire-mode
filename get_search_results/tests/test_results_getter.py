@@ -46,6 +46,24 @@ class ResultsGetterTest(unittest.TestCase):
         self.assertEqual(expected, results)
 
 
+    def test_intregration_without_nonce(self):
+        rg.search_term = 'test'
+        rg.exclusions = ['private-']
+        rg.meilisearch_response = {
+            'hits': [
+                { 'filename': 'example- test 6.txt'},
+                { 'filename': 'widget- test 7.txt'},
+                { 'filename': 'private- test 8.txt'},
+                { 'filename': 'example- test 9.txt'}
+            ]
+        }
+        rg.generate_results()
+        expected = ['example- test 6.txt', 'widget- test 7.txt', 'example- test 9.txt']
+        results = rg.results
+        self.assertEqual(expected, results)
+
+
+
     def test_load_nonce(self):
         rg.search_term = 'example- wibble wobble'
         rg.load_nonce()
