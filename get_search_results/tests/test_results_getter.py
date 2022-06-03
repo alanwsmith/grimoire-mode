@@ -16,6 +16,31 @@ class ResultsGetterTest(unittest.TestCase):
         global rg
         rg = ResultsGetter()
 
+    def test_integration_basic(self):
+        # given
+        rg.search_term = 'example- wibble wobble'
+        rg.meilisearch_response = {
+            'hits': [
+                'example- a.txt',
+                'widget- b.txt',
+                'private- c.txt',
+                'example- d.txt'
+            ]
+        }
+
+        # when
+        rg.finalize_results()
+
+        # then
+        expected = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
+        results = rg.results
+        self.assertEqual(expected, results)
+
+
+
+
+
+
     def test_ready_for_no_results(self):
         expect = "Ready..."
         result = rg.search("")

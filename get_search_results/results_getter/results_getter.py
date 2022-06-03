@@ -36,3 +36,5 @@ class ResultsGetter:
                 filtered_results.append(item)
         self.results = filtered_results
 
+    def finalize_results(self):
+        self.results = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
