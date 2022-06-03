@@ -33,12 +33,6 @@ class ResultsGetterTest(unittest.TestCase):
         result = rg.filtered_response('example-')
         self.assertEqual(expect, result)
 
-
-
-
-
-
-
     def test_grouping_results(self):
         # Group all the nonce words up top
         rg.meilisearch_response = {
