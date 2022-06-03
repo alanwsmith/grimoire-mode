@@ -31,7 +31,12 @@ class ResultsGetter:
                 secondary_return_list.append(candidate['filename'])
         return_list.extend(secondary_return_list)
         return return_list
-    
+
+    def load_nonce(self):
+        match = re.match(r'^(\w+-) ', self.search_term)
+        if match:
+            self.nonce = match[1]
+
 
     def parse_meilisearch_results(self):
         parsed_results = []
@@ -50,6 +55,7 @@ class ResultsGetter:
             if keep_it == True:
                 filtered_results.append(item)
         self.results = filtered_results
+
 
     def sort_results(self):
         primary_list = []

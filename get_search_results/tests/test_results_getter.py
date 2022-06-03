@@ -3,12 +3,12 @@
 import os
 import sys
 import unittest
-
 from datetime import datetime
-
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+
 from results_getter.results_getter import ResultsGetter
+
 
 class ResultsGetterTest(unittest.TestCase):
 
@@ -17,7 +17,6 @@ class ResultsGetterTest(unittest.TestCase):
         rg = ResultsGetter()
 
 
-    def test_integration_finalize_results(self):
         rg.search_term = 'example- wibble wobble'
         rg.meilisearch_response = {
             'hits': [
@@ -33,6 +32,12 @@ class ResultsGetterTest(unittest.TestCase):
         self.assertEqual(expected, results)
 
 
+    def test_load_nonce(self):
+        rg.search_term = 'example- wibble wobble'
+        rg.load_nonce()
+        expected = 'example-'
+        results = rg.nonce
+        self.assertEqual(expected, results)
 
 
     def test_parse_meilisearch_results(self):
