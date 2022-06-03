@@ -4,6 +4,9 @@ class ResultsGetter:
 
     # TODO: Setup to pull nonce_words_to_exclude
     # via a config
+    # NOTE: private tokens are only parsed out
+    # of the retunred filenames, not the contents
+    # of the files themselves. 
 
     def __init__(self):
         self.meilisearch_response = {}
