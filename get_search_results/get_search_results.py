@@ -16,8 +16,9 @@ import sys
 
 token = keyring.get_password('alan--meilisearch--scratchpad--search-key', 'alan')
 
-# set a default search term for testing
-search_term = "py- RegEx"
+# set empty search term that will be used to return
+# ready if nothing has been requested yet
+search_term = ""
 
 # use the search term from the command line
 # if one is passed in
@@ -64,7 +65,13 @@ else:
 results_with_nonce.extend(results_without_nonce)
 
 
-print("\n".join(results_with_nonce))
+# TODO: return this Ready state earlier
+# and without making a call to speed up
+# the first results
+if search_term == "":
+    print("Ready...")
+else:
+    print("\n".join(results_with_nonce))
 
 
 # print(results_with_nonce)
