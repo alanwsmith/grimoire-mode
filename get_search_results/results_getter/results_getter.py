@@ -19,6 +19,8 @@ class ResultsGetter:
     def search(self, term):
         return "Ready..."
 
+    # TODO: Remove this in favore of indiviual
+    # funciton
     def filtered_response(self, term):
         return_list = []
         secondary_return_list = []
