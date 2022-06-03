@@ -31,6 +31,7 @@ class ResultsGetter:
                 secondary_return_list.append(candidate['filename'])
         return_list.extend(secondary_return_list)
         return return_list
+    
 
     def parse_meilisearch_results(self):
         parsed_results = []
@@ -61,6 +62,7 @@ class ResultsGetter:
         self.results = primary_list + secondary_list
 
 
+        
     def finalize_results(self):
         self.results = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
 
@@ -83,3 +85,16 @@ class ResultsGetter:
     #                 secondary_return_list.append(candidate['filename'])
     #     return_list.extend(secondary_return_list)
     #     return return_list
+
+
+
+if __name__ == '__main__':
+
+    # load the config
+    # get the search term
+    # get the nonce
+    # get the meilisearch respose
+    # to the process
+    # output the response via print
+
+    pass
