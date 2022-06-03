@@ -49,7 +49,7 @@
             (start-process
              "search"
              nil
-             "/bin/bash"
+             "/opt/homebrew/bin/python3"
              grimoire-mode-get-search-results-script
              helm-pattern)))
         :buffer "*helm grimoire search*"))
