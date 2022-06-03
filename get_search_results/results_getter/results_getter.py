@@ -9,10 +9,12 @@ class ResultsGetter:
     # of the files themselves. 
 
     def __init__(self):
+        self.search_term = ""
         self.meilisearch_response = {}
         self.return_list = []
         self.results = []
         self.tokens_to_exclude = []
+        self.nonce = None
 
     def search(self, term):
         return "Ready..."
