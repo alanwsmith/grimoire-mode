@@ -68,9 +68,15 @@ class ResultsGetter:
         self.results = primary_list + secondary_list
 
 
-        
-    def finalize_results(self):
-        self.results = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
+    def generate_results(self):
+        self.load_nonce()
+        self.parse_meilisearch_results()
+        self.sort_results()
+        self.remove_exclusions()
+
+        # TODO: remove the hard coded test stub here
+        # self.results = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
+
 
         # self.results = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
 

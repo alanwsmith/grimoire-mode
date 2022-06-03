@@ -17,16 +17,18 @@ class ResultsGetterTest(unittest.TestCase):
         rg = ResultsGetter()
 
 
+    def test_integration_generate_results(self):
         rg.search_term = 'example- wibble wobble'
+        rg.exclusions = ['private-']
         rg.meilisearch_response = {
             'hits': [
-                'example- a.txt',
-                'widget- b.txt',
-                'private- c.txt',
-                'example- d.txt'
+                { 'filename': 'example- a.txt'},
+                { 'filename': 'widget- b.txt'},
+                { 'filename': 'private- c.txt'},
+                { 'filename': 'example- d.txt'}
             ]
         }
-        rg.finalize_results()
+        rg.generate_results()
         expected = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
         results = rg.results
         self.assertEqual(expected, results)
