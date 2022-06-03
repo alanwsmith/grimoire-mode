@@ -89,12 +89,9 @@ class ResultsGetter:
 
 
 if __name__ == '__main__':
-
-    # load the config
-    # get the search term
-    # get the nonce
+    # load the search term from the arg
+    # load exclusions from config
     # get the meilisearch respose
-    # to the process
+    # run generate_results()
     # output the response via print
-
     pass
