@@ -67,6 +67,7 @@ class ResultsGetter:
                 secondary_list.append(result)
         self.results = primary_list + secondary_list
 
+        
 
     def generate_results(self):
         if self.search_term == '':
@@ -91,22 +92,15 @@ class ResultsGetter:
     #     for candidate in self.meilisearch_response['hits']:
     #         is_private = False
     #         for private_term in self.nonce_words_to_exclude:
-    #             if private_term in candidate['filename']:
+
     #                 is_private = True
     #         if is_private == False:
     #             if re.match(term, candidate['filename']):
     #                 return_list.append(candidate['filename'])
     #             else:
-    #                 secondary_return_list.append(candidate['filename'])
+    #   
     #     return_list.extend(secondary_return_list)
     #     return return_list
 
 
 
-if __name__ == '__main__':
-    # load the search term from the arg
-    # load exclusions from config
-    # get the meilisearch respose
-    # run generate_results()
-    # output the response via print
-    pass
