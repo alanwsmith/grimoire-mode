@@ -136,9 +136,6 @@ class ResultsGetterTest(unittest.TestCase):
 
 
 
-
-
-
     # def test_hide_private_results(self):
     #     # remove private nonce words from results
     #     # by default
@@ -153,6 +150,7 @@ class ResultsGetterTest(unittest.TestCase):
     #     expect = ['widget- c.txt', 'example- b.txt']
     #     result = rg.filtered_response_dev('foo-')
     #     self.assertEqual(expect, result)
+
 
 
 
