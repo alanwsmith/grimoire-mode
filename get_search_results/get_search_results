@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+
+import json
+import keyring
+import sys
+import os.path
+import requests
+
+from pathlib import Path
+from results_getter.results_getter import ResultsGetter
+
+
+# Note that there is code to check
+# for empty search too, but this
+# takes care of it in advance. 
+if len(sys.argv) == 1:
+    print("Ready...")
+elif len(sys.argv) == 2:
+    config_path = os.path.join(
+        Path.home(),
+        '.config',
+        'grimoire-mode',
+        'search-config.json')
+    with open(config_path) as _config:
+        config = json.load(_config)
+        search_term = sys.argv[1]
+        url = 'http://127.0.0.1:7700/indexes/grimoire/search'
+        token = keyring.get_password('alan--meilisearch--scratchpad--search-key', 'alan')
+        headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json'
+        }
+        data = {
+            'q': search_term,
+            'limit': 40,
+            'attributesToRetrieve': [ 'filename' ]
+        }
+        response = requests.post(url, headers=headers, json=data)
+        rg = ResultsGetter()
+        rg.search_term = search_term
+        rg.exclusions = config['exclusions']
+        rg.meilisearch_response = response.json()
+        rg.generate_results()
+
+        print("\n".join(rg.results))
