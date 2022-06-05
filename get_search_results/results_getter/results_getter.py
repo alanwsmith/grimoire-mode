@@ -69,6 +69,8 @@ class ResultsGetter:
     def generate_results(self):
         if self.search_term == '':
             self.results = ['Ready...']
+        elif len(self.search_term) == 1:
+            self.results = ['Ready...']
         else:
             self.load_nonce()
             self.parse_meilisearch_results()

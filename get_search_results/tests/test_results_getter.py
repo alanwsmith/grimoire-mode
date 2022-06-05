@@ -45,6 +45,25 @@ class ResultsGetterTest(unittest.TestCase):
         results = rg.results
         self.assertEqual(expected, results)
 
+    # NOTE: This probably won't get hit in prod
+    # since the process will bail before this is
+    # called. 
+    def test_integration_only_one_character_in_search_term(self):
+        rg.search_term = 'a'
+        rg.exclusions = ['private-']
+        rg.meilisearch_response = {
+            'hits': [
+                { 'filename': 'example- a.txt'},
+                { 'filename': 'widget- b.txt'},
+                { 'filename': 'private- c.txt'},
+                { 'filename': 'example- d.txt'}
+            ]
+        }
+        rg.generate_results()
+        expected = ['Ready...']
+        results = rg.results
+        self.assertEqual(expected, results)
+
 
     def test_intregration_without_nonce(self):
         rg.search_term = 'test'
@@ -87,10 +106,12 @@ class ResultsGetterTest(unittest.TestCase):
         self.assertEqual(expected, results)
 
 
+        # TODO: make sure this fails when it should
     def test_ready_for_no_results(self):
         expect = "Ready..."
         result = rg.search("")
         self.assertEqual(expect, result)
+
 
     def test_basic_results(self):
         rg.meilisearch_response = {
