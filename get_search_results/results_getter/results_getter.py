@@ -2,11 +2,9 @@ import re
 
 class ResultsGetter:
 
-    # TODO: Setup to pull nonce_words_to_exclude
-    # via a config
-    # NOTE: private tokens are only parsed out
-    # of the retunred filenames, not the contents
-    # of the files themselves. 
+    # NOTE: exclusions are only taken out
+    # of the returned filenames, not the contents
+    # of the files themselves.
 
     def __init__(self):
         self.search_term = ""
@@ -67,7 +65,6 @@ class ResultsGetter:
                 secondary_list.append(result)
         self.results = primary_list + secondary_list
 
-        
 
     def generate_results(self):
         if self.search_term == '':
@@ -77,30 +74,4 @@ class ResultsGetter:
             self.parse_meilisearch_results()
             self.sort_results()
             self.remove_exclusions()
-
-        # TODO: remove the hard coded test stub here
-        # self.results = ['example- a.txt', 'example- d.txt', 'widget- b.txt']
-
-
-        # self.results = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
-
-    # def filtered_response_dev(self, term):
-    #     # return_list = ['widget- c.txt', 'example- b.txt'] 
-    #     # return return_list
-    #     return_list = []
-    #     secondary_return_list = []
-    #     for candidate in self.meilisearch_response['hits']:
-    #         is_private = False
-    #         for private_term in self.nonce_words_to_exclude:
-
-    #                 is_private = True
-    #         if is_private == False:
-    #             if re.match(term, candidate['filename']):
-    #                 return_list.append(candidate['filename'])
-    #             else:
-    #   
-    #     return_list.extend(secondary_return_list)
-    #     return return_list
-
-
 
