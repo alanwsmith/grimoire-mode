@@ -37,7 +37,7 @@
     )
   )
 
-(defun grimoire-mode-search-v0.10 ()
+(defun grimoire-mode-search ()
   (interactive)
   (grimoire-mode-handle-selection(helm :sources
         (helm-build-async-source "Grimoire Search"
