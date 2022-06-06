@@ -1,5 +1,5 @@
 import { assert, test } from 'vitest';
-import { FileParser } from '../src/file-parser.js';
+import { FileParser } from '../src/FileParser.js';
 
 test('Integration - Happy path with basic filename', () => {
     const fileName = "py- regex test one.txt";
@@ -32,4 +32,3 @@ This is some content.
     assert.equal(expected.contents, result.contents);
     assert.equal(expected.facets[0], result.facets[0]);
 });
-
