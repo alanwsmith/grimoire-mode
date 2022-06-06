@@ -65,3 +65,16 @@ test('GetFacetFromFileName - One word file name', () => {
 });
 
 
+
+test('GetFacetFromFileName - Filename with dashes', () => {
+    const fileName = `no-wordfilename.txt`;
+    const result = GetFacetFromFileName({
+        fileName: fileName
+    });
+    assert.equal(result.length, 0);
+});
+
+
+
+// TODO:
+// `facet- seoncdone- see if you want that.txt`
