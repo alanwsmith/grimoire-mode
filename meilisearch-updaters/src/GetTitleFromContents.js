@@ -5,7 +5,7 @@ export function GetTitleFromContents (params) {
     for (const line of lines) {
         const match = line.match(pattern);
         if (match !== null) {
-            return match[1];
+            return match[1].trim();
         }
     }
     return null;
