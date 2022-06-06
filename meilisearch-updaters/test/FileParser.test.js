@@ -1,14 +1,18 @@
 import { assert, test } from 'vitest';
 import { FileParser } from '../src/FileParser.js';
 
+
+// This is the main integration test
+
+
 test('Integration - Happy path with basic filename', () => {
     const fileName = "py- regex test one.txt";
     const contents = `
-#+TITLE: This Is The Title 
+#+TITLE: This Is The Title
 #+DATE: 2020-11-20T21:41:42
-#+ID: 1ka6lw9Ec9Tb
-#+CATEGORY: Python 
-#+STATUS: published 
+#+ID: aaaabbbb1212
+#+CATEGORY: Python
+#+STATUS: published
 #+TYPE: post
 
 ---
@@ -17,7 +21,8 @@ This is some content.
 `;
     const expected = {
         fileName: fileName,
-        id: "1ka6lw9Ec9Tb",
+        title: `This Is The Title`,
+        id: "aaaabbbb1212",
         contents: contents,
         facets: ['py-']
     };
@@ -31,4 +36,5 @@ This is some content.
     assert.equal(expected.id, result.id);
     assert.equal(expected.contents, result.contents);
     assert.equal(expected.facets[0], result.facets[0]);
+    assert.equal(expected.title, result.title);
 });

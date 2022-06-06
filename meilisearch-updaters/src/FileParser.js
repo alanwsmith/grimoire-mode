@@ -1,7 +1,8 @@
 export function FileParser({fileName, contents}) {
     let return_value = {
         fileName: fileName,
-        id: "1ka6lw9Ec9Tb",
+        title: `This Is The Title`,
+        id: "aaaabbbb1212",
         contents: contents,
         facets: ['py-']
     };
