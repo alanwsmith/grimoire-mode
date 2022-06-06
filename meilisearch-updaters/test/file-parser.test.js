@@ -65,7 +65,6 @@ test('GetFacetFromFileName - One word file name', () => {
 });
 
 
-
 test('GetFacetFromFileName - Filename with dashes', () => {
     const fileName = `no-wordfilename.txt`;
     const result = GetFacetFromFileName({
@@ -73,6 +72,18 @@ test('GetFacetFromFileName - Filename with dashes', () => {
     });
     assert.equal(result.length, 0);
 });
+
+
+
+test('GetFacetFromFileName - One facet from multiple dashes', () => {
+    const fileName = `facet- skip- morestuff.txt`;
+    const expected = ['facet-'];
+    const result = GetFacetFromFileName({
+        fileName: fileName
+    });
+    assert.equal(result[0], expected[0]);
+});
+
 
 
 
