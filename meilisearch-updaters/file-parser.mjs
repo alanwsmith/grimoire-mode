@@ -9,3 +9,7 @@ export function FileParser({fileName, contents}) {
 }
 
 
+export function GetFacetFromFileName({fileName}) {
+    const fileParts = fileName.split(' ');
+    return [fileParts[0]];
+}
