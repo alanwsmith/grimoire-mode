@@ -3,38 +3,40 @@ import { GetTitleFromContents } from '../src/GetTitleFromContents.js';
 
 
 
+/////////////////////////////////////////////
 
-
-
-test('GetTitleFromContents - one title - happy path', () => {
-    const contents = `#+TITLE: Quick Brown Fox
+const contents1 = `#+TITLE: Quick Brown Fox 
 #+DATE: 2022-01-01T04:34:23
 
 ---
 
 body of text`;
 
+//
+
+test('GetTitleFromContents - one title - happy path', () => {
     const expected = `Quick Brown Fox`;
     const result = GetTitleFromContents({
-        contents: contents
+        contents: contents1
     });
     expect(result).toBe(expected);
 });
 
 
+/////////////////////////////////////////////
 
-
-
-test('GetTitleFromContents - no title', () => {
-    const contents = `#+DATE: 2022-01-01T04:34:23
+const contents2 = `#+DATE: 2022-01-01T04:34:23
 
 ---
 
 body of text`;
 
+//
+
+test('GetTitleFromContents - no title', () => {
     const expected = null;
     const result = GetTitleFromContents({
-        contents: contents
+        contents: contents2
     });
     expect(result).toBe(expected);
 });
