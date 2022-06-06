@@ -44,7 +44,24 @@ test('GetTitleFromContents - no title', () => {
 
 
 
-// TODO:
+/////////////////////////////////////////////
 
-// No title
-// Multiple titles
+const contents3 = `#+TITLE: First Title
+#+DATE: 2022-01-01T04:34:23
+#+TITLE: Second Title
+
+---
+
+body of text`;
+
+//
+
+test('GetTitleFromContents - two titles - only show one', () => {
+    const expected = `First Title`;
+    const result = GetTitleFromContents({
+        contents: contents3
+    });
+    expect(result).toBe(expected);
+});
+
+
