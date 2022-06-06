@@ -1,10 +1,18 @@
-export function FileParser({fileName, contents}) {
+import { GetFacetFromFileName } from './GetFacetFromFileName.js';
+
+export function FileParser(params) {
+    const facets = [];
+    const fileNameFacet = GetFacetFromFileName(params);
+    if(fileNameFacet !== null) {
+        facets.push(fileNameFacet);
+    }
+
     let return_value = {
-        fileName: fileName,
+        fileName: params.fileName,
         title: `This Is The Title`,
         id: "aaaabbbb1212",
-        contents: contents,
-        facets: ['py-']
+        contents: params.contents,
+        facets: facets 
     };
     return return_value;
 }

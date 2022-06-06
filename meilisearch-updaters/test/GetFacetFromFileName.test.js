@@ -1,51 +1,54 @@
-import { assert, test } from 'vitest';
+import { expect, test } from 'vitest';
 import { GetFacetFromFileName } from '../src/GetFacetFromFileName.js';
 
 
 test('Happy Path - One facet', () => {
     const fileName = `facet- test name.txt`;
-    const expected = [`facet-`];
+    const expected = `facet-`;
     const result = GetFacetFromFileName({
         fileName: fileName
     });
-    assert.equal(result[0], expected[0]);
+    expect(result).toBe(expected);
 });
 
 
 test('No facet in filename', () => {
     const fileName = `no facet here.txt`;
+    const expected = null;
     const result = GetFacetFromFileName({
         fileName: fileName
     });
-    assert.equal(result.length, 0);
+    expect(result).toBe(expected);
 });
 
 
 test('One word filename', () => {
     const fileName = `nowordfilename.txt`;
+    const expected = null;
     const result = GetFacetFromFileName({
         fileName: fileName
     });
-    assert.equal(result.length, 0);
+    expect(result).toBe(expected);
 });
 
 
 test('Filename with dashes', () => {
     const fileName = `embedded-dash.txt`;
+    const expected = null;
     const result = GetFacetFromFileName({
         fileName: fileName
     });
-    assert.equal(result.length, 0);
+    expect(result).toBe(expected);
 });
 
 
 test('One facet from multiple dashes', () => {
     const fileName = `facet- skip- morestuff.txt`;
-    const expected = ['facet-'];
+    const expected = `facet-`;
     const result = GetFacetFromFileName({
         fileName: fileName
     });
-    assert.equal(result[0], expected[0]);
+    expect(result).toBe(expected);
 });
 
 
