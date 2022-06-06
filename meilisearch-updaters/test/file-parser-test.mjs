@@ -1,24 +1,38 @@
 import assert from 'assert';
 import { FileParser } from '../file-parser.mjs';
-import { Hello } from '../file-parser.mjs';
-
-// describe('Initial Test', function () {
-//     it('should pass', function () {
-//         const params = { fileName: "asdf", fileContent: "asdf" };
-//         const expected = "hello, world";
-//         const result = FileParser(params);
-//         assert.equal(result, "hello, world");
-//     });
-// });
 
 
+const contents1 = `
+#+TITLE: This Is The Title 
+#+DATE: 2020-11-20T21:41:42
+#+ID: 1ka6lw9Ec9Tb
+#+CATEGORY: Python 
+#+STATUS: published 
+#+TYPE: post
 
+---
 
-describe('Hello', function () {
-    it('should say a name', function () {
-        const params = { who: "Xander" };
-        const expected = "Hello, Xander!";
-        const result = Hello(params);
-        assert.equal(expected, result);
+This is some content.
+`;
+
+describe('Integration Tests', function () {
+    it('should work', function () {
+        const fileName = "py- regex test one.txt";
+        const expected = {
+            fileName: fileName,
+            id: "1ka6lw9Ec9Tb",
+            contents: contents1,
+            facets: ['py-']
+        };
+        const result = FileParser({
+            fileName: fileName,
+            contents: contents1
+        });
+        assert.equal(expected.fileName, result.fileName);
+        assert.equal(expected.id, result.id);
+        assert.equal(expected.contents, result.contents);
+        assert.equal(expected.facets[0], result.facets[0]);
     });
 });
+
+

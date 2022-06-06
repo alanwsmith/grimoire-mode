@@ -1,8 +1,11 @@
-export function FileParser({fileName, fileContents}) {
-    return "hello, world";
+export function FileParser({fileName, contents}) {
+    let return_value = {
+        fileName: fileName,
+        id: "1ka6lw9Ec9Tb",
+        contents: contents,
+        facets: ['py-']
+    };
+    return return_value;
 }
 
 
-export function Hello({who}) {
-    return `Hello, ${who}!`;
-}
