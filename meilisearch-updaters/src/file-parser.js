@@ -10,13 +10,6 @@ export function FileParser({fileName, contents}) {
 
 
 export function GetFacetFromFileName({fileName}) {
-    return GetFacetFromFileNameDev({fileName:fileName});
-    const fileParts = fileName.split(' ');
-    return [fileParts[0]];
-}
-
-
-export function GetFacetFromFileNameDev({fileName}) {
     const fileParts = fileName.split(' ');
     const partParts = fileParts[0].split('-');
     if (partParts.length === 2) {

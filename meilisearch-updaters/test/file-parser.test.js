@@ -28,6 +28,8 @@ test('Integration - Happy path with basic filename', () => {
         fileName: fileName,
         contents: contents1
     });
+    // TODO: Swithc this order to result/expected
+    // to match error messages.
     assert.equal(expected.fileName, result.fileName);
     assert.equal(expected.id, result.id);
     assert.equal(expected.contents, result.contents);
@@ -41,17 +43,36 @@ test('GetFacetFromFileName - One facet', () => {
     const result = GetFacetFromFileName({
         fileName: fileName
     });
-    assert.equal(expected[0], result[0]);
+    assert.equal(result[0], expected[0]);
 });
 
 
 test('GetFacetFromFileName - One facet', () => {
     const fileName = `no facet here test name.txt`;
-    const result = GetFacetFromFileNameDev({
+    const result = GetFacetFromFileName({
         fileName: fileName
     });
-    assert.equal(0, result.length);
+    assert.equal(result.length, 0);
 });
+
+
+test('GetFacetFromFileName - One word file name', () => {
+    const fileName = `nowordfilename.txt`;
+    const result = GetFacetFromFileName({
+        fileName: fileName
+    });
+    assert.equal(result.length, 0);
+});
+
+
+// test('GetFacetFromFileName - Filename with dashes', () => {
+//     const fileName = `no-wordfilename.txt`;
+//     const result = GetFacetFromFileNameDev({
+//         fileName: fileName
+//     });
+//     assert.equal(result.length, 0);
+// });
+
 
 
 
