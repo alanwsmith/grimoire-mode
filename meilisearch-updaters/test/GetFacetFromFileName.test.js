@@ -1,8 +1,8 @@
 import { assert, test } from 'vitest';
-import { GetFacetFromFileName } from '../src/file-parser.js';
-import { GetFacetFromFileNameDev } from '../src/file-parser.js';
+import { GetFacetFromFileName } from '../src/GetFacetFromFileName.js';
 
-test('GetFacetFromFileName - One facet', () => {
+
+test('Happy Path - One facet', () => {
     const fileName = `facet- test name.txt`;
     const expected = [`facet-`];
     const result = GetFacetFromFileName({
@@ -12,8 +12,8 @@ test('GetFacetFromFileName - One facet', () => {
 });
 
 
-test('GetFacetFromFileName - One facet', () => {
-    const fileName = `no facet here test name.txt`;
+test('No facet in filename', () => {
+    const fileName = `no facet here.txt`;
     const result = GetFacetFromFileName({
         fileName: fileName
     });
@@ -21,7 +21,7 @@ test('GetFacetFromFileName - One facet', () => {
 });
 
 
-test('GetFacetFromFileName - One word file name', () => {
+test('One word filename', () => {
     const fileName = `nowordfilename.txt`;
     const result = GetFacetFromFileName({
         fileName: fileName
@@ -30,8 +30,8 @@ test('GetFacetFromFileName - One word file name', () => {
 });
 
 
-test('GetFacetFromFileName - Filename with dashes', () => {
-    const fileName = `no-wordfilename.txt`;
+test('Filename with dashes', () => {
+    const fileName = `embedded-dash.txt`;
     const result = GetFacetFromFileName({
         fileName: fileName
     });
@@ -39,8 +39,7 @@ test('GetFacetFromFileName - Filename with dashes', () => {
 });
 
 
-
-test('GetFacetFromFileName - One facet from multiple dashes', () => {
+test('One facet from multiple dashes', () => {
     const fileName = `facet- skip- morestuff.txt`;
     const expected = ['facet-'];
     const result = GetFacetFromFileName({
@@ -48,4 +47,5 @@ test('GetFacetFromFileName - One facet from multiple dashes', () => {
     });
     assert.equal(result[0], expected[0]);
 });
+
 
