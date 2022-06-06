@@ -1,4 +1,5 @@
 import { GetFacetFromFileName } from './GetFacetFromFileName.js';
+import { GetTitleFromContents } from './GetTitleFromContents.js';
 
 export function FileParser(params) {
     const facets = [];
@@ -9,7 +10,7 @@ export function FileParser(params) {
 
     let return_value = {
         fileName: params.fileName,
-        title: `This Is The Title`,
+        title: GetTitleFromContents(params),
         id: "aaaabbbb1212",
         contents: params.contents,
         facets: facets 
