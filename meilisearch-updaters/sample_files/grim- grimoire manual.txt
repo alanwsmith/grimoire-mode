@@ -1,0 +1,98 @@
+#+TITLE: Grimoire User's Manual
+#+DATE: 2022-06-03T00:31:15
+#+ID: 2a3g5vj5lujl
+#+CATEGORY: Miscellaneous
+#+STATUS: draft 
+#+TYPE: post
+
+---
+
+I'm writing this in the style of a future press.
+release. That's to say, the language speaks as if
+all the features are done. Those marked as in
+progress are still underway, but I like the
+stronger language. 
+
+
+** Tangled Config Files
+
+- Lots of emacs config is managed from the
+  grimoire. The nonce facet for files containg
+  config stuff is `config-`. Output from the
+  tangled process goes into
+  `~/workshop/dotfiles.alanwsmith.com/dotfiles/emacs/tangled-files`
+
+- Everything in that directory is loaded when
+  emacs starts up
+
+- File names are set explicity in the `:tangled`
+  call of the source blocks so the originating
+  files can be renamed without problem. 
+
+  
+
+** Source Blocks
+
+- Optionally use `#+NAME: listing_description` to
+  put blocks in one part of the file and then show
+  them in another part with
+  `#+LISTING: listing_description`. (NOTE that the
+  name is the same so you can just copy/paste the
+  line and switch `NAME` to `LISTING`
+
+  The blocks won't show up in the initial location
+  and will only show where they are output with
+  `#+LISTING: listing_description`
+ 
+- Use optional `#+:FILENAME: dir/name.txt` to set
+  the filename that will show up above source code
+  blocks (and don't use `:tangled` names since those
+  can be different)
+
+- Use `#+NAME: hidden_description` to prevent a
+  source block from being output when the site is
+  built.
+
+
+
+
+** Hidding Content
+
+- IN PROGRESS: Souce code blocks who's name starts with
+  `HIDDEN` aren't output when the pages is built for
+  the site. That provides for a way to have concices
+  notes at the top of a reference while providing the
+  full prose for the site.
+
+- IN PROGRESS: Source code blocks who's name starts with
+  `LISTING` don't appear directly when the pages is
+  output for the site. They are inserted back into the
+  page with a slug that looks like `@@LISTING-TOKEN@@`.
+  This lets the listings show up at the top of the page
+  in the local reference while inserting them in the
+  prose on the site. 
+
+
+** Formatting Results
+
+- There's a results formatter in place that adds
+  empty lines at the top and bottom of results and
+  pads them in two spaces to make them look better.
+
+- IN PROGRESS: The formatter also wraps longer lines
+  by default. That can be turned off in the
+  call to it. 
+
+
+** Searching
+
+- Post with work and personal nonce- words are filtered out
+  by default to prevent doxing during streaming
+
+- To view everything, prefix the search with `all-`. For
+  example: `all- personal- first computer`. You can also
+  skip the second none word
+
+  
+
+  

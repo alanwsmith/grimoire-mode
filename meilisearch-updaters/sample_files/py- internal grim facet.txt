@@ -1,0 +1,13 @@
+#+TITLE: This has an internal facet
+#+FACET: grim-
+
+---
+
+These days a chicken leg is a rare dish.
+
+Rice is often served in round bowls.
+
+The juice of lemons makes fine punch.
+
+The box was thrown beside the parked truck.
+
