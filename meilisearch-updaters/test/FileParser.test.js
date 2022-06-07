@@ -14,6 +14,7 @@ test('Integration - Happy path with basic filename', () => {
 #+CATEGORY: Python
 #+STATUS: published
 #+TYPE: post
+#+FACET: testing- 
 
 ---
 
@@ -24,7 +25,7 @@ This is some content.
         title: `This Is The Title`,
         id: "aaaabbbb1212",
         contents: contents,
-        facets: ['py-']
+        facets: ['py-', 'testing-']
     };
     const result = FileParser({
         fileName: fileName,
@@ -36,5 +37,6 @@ This is some content.
     assert.equal(expected.id, result.id);
     assert.equal(expected.contents, result.contents);
     assert.equal(expected.facets[0], result.facets[0]);
+    assert.equal(expected.facets[1], result.facets[1]);
     assert.equal(expected.title, result.title);
 });
