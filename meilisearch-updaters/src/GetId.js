@@ -7,6 +7,10 @@ export function GetId(params) {
             return match[1].trim();
         }
     }
+    // If you're here there was no id
+    // in the content. Just using the
+    // file name for the id
+    return params.fileName;
 }
 
 

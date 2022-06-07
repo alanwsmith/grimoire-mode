@@ -23,3 +23,28 @@ test('Happy Path - Id in contents', () => {
     });
     expect(result).toBe(expected);
 });
+
+///////////////////////////////////
+
+
+
+const contents2 = `#+TITLE: Example Content
+#+DATE: 2022-01-01T09:23:43
+#+TYPE: post
+
+---
+
+body content
+`
+
+
+
+test('GetId - no id in contents', () => {
+    const fileName = 'facet- test for id.txt';
+    const expected = `facet- test for id.txt`;
+    const result = GetId({
+        fileName: fileName,
+        contents: contents2
+    });
+    expect(result).toBe(expected);
+});
