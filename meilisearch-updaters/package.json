@@ -9,11 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@vitest/ui": "^0.14.1",
     "vitest": "^0.14.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "meilisearch": "^0.25.1"
   }
 }
