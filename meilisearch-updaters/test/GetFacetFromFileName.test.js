@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { GetFacetFromFileName } from '../src/GetFacetFromFileName.js';
+import { GetFacetFromFileName } from '../src/lib/GetFacetFromFileName.js';
 
 
 test('Happy Path - One facet', () => {

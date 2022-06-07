@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { GetFacetsFromContents } from '../src/GetFacetsFromContents.js';
+import { GetFacetsFromContents } from '../src/lib/GetFacetsFromContents.js';
 
 
 const contents1 = `#+TITLE: Document Title

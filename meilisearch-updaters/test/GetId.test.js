@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { GetId } from '../src/GetId.js';
+import { GetId } from '../src/lib/GetId.js';
 
 
 const contents1 = `#+TITLE: Example Content

@@ -1,5 +1,5 @@
 import { assert, test } from 'vitest';
-import { FileParser } from '../src/FileParser.js';
+import { FileParser } from '../src/lib/FileParser.js';
 
 
 // This is the main integration test

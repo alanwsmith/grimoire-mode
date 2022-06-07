@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { GetTitleFromContents } from '../src/GetTitleFromContents.js';
+import { GetTitleFromContents } from '../src/lib/GetTitleFromContents.js';
 
 
 
