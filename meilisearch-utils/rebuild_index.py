@@ -84,9 +84,9 @@ def update_files():
 
     print("Prepping Documents")
     for file_item in file_list:
-        if file_item['extension'].lower() == "txt":
+        if file_item['extension'].lower() == "org":
             with open(file_item['full_path'], 'r', encoding='utf-8', errors='ignore') as _in:
-                if file_item['extension'] == 'txt':
+                if file_item['extension'] == 'org':
                     # print(content)
                     new_item = {
                         "id": string_to_md5(file_item['name_with_extension']),
