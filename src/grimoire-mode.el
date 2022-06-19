@@ -2,6 +2,10 @@
 (require 'helm-lib)
 (require 'helm-utils)
 
+;; NOTE: I think this needs to be set in the custom
+;; config section of the spacemacs config:
+;; '(idle-update-delay 0.1)
+
 ;; See .spacemacs for setting grimoire-mode-directory
 ;; and grimoire-mode-get-search-results-script
 
