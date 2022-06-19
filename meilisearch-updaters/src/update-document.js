@@ -20,22 +20,31 @@ const securityCall = `security find-generic-password -w -a alan -s alan--meilise
 
 
 if (process.argv.length > 1) {
-    const fileName = process.argv[2];
-    const filePath = `${rootDir}/${fileName}`;
-    const contents = fs.readFileSync(filePath, 'utf8');
-    const payload = [];
-    payload[0] = FileParser({ fileName: fileName, contents: contents });
-    console.log(payload[0]);
-    const apiKey = child_process
-          .execSync(securityCall, { encoding: 'utf-8' })
-          .trim();
-    const client = new MeiliSearch({
-        host: host,
-        apiKey: apiKey,
-    });
-    client
-        .index(indexName)
-        .addDocuments(payload)
-        .then((res) => console.log(res));
+    const filePath = process.argv[2];
+    const filePathParts = filePath.split("/");
+    const fileName = filePathParts.pop();
+    const fileNameParts = fileName.split('.');
+    if (fileNameParts.length > 1) {
+        const fileExtension = fileNameParts.pop();
+        if (fileExtension === 'org') {
+            if (fileNameParts[0].match(/\w/)) {
+                console.log(`Updating: ${filePath}`)
+                const contents = fs.readFileSync(filePath, 'utf8');
+                const payload = [];
+                payload[0] = FileParser({ fileName: fileName, contents: contents });
+                const apiKey = child_process
+                      .execSync(securityCall, { encoding: 'utf-8' })
+                      .trim();
+                const client = new MeiliSearch({
+                    host: host,
+                    apiKey: apiKey,
+                });
+                client
+                    .index(indexName)
+                    .addDocuments(payload)
+                // .then((res) => console.log(res));
+            }
+        }
+    }
 }
 
