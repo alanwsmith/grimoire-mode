@@ -3,7 +3,7 @@ import path from 'path'
 
 export function ListDir(
     rootDir,
-    isRecursive = true,
+    isRecursive = false,
     hiddenFiles = false,
     subDir = '',
     fileListInitial = []
@@ -22,7 +22,7 @@ export function ListDir(
         let subDirPath = path.join(subDir, fileName)
         if (fs.statSync(filePath).isDirectory()) {
             if (isRecursive) {
-                localFileList = list_dir(
+                localFileList = ListDir(
                     rootDir,
                     isRecursive,
                     hiddenFiles,

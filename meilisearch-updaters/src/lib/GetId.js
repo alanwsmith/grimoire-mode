@@ -10,7 +10,7 @@ export function GetId(params) {
     // If you're here there was no id
     // in the content. Just using the
     // file name for the id
-    return params.fileName;
+    return params.fileName.replace(/\W/g, '');
 }
 
 
