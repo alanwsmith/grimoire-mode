@@ -17,7 +17,7 @@ const fileList = ListDir(
     '/Users/alan/Grimoire'
 )
 
-const indexName = 'grimoire-test'
+const indexName = 'grimoire'
 
 const host = 'http://127.0.0.1:7700'
 
@@ -32,9 +32,9 @@ fileList.forEach((file) => {
         const contents = fs.readFileSync(file.full_path, 'utf8')
         const details = FileParser({ fileName: file.name, contents: contents })
         payload.push(details)
-        console.log(details)
+        // console.log(details)
     } catch (err) {
-        console.error(err)
+        // console.error(err)
     }
 })
 
@@ -54,5 +54,5 @@ client
 client
     .index(indexName)
     .addDocuments(payload)
-    .then((res) => console.log(res))
+    // .then((res) => console.log(res))
 

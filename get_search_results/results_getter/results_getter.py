@@ -3,7 +3,7 @@ import re
 class ResultsGetter:
 
     # NOTE: exclusions are only taken out
-    # of the returned filenames, not the contents
+    # of the returned fileNames, not the contents
     # of the files themselves.
 
     def __init__(self):
@@ -23,10 +23,10 @@ class ResultsGetter:
         return_list = []
         secondary_return_list = []
         for candidate in self.meilisearch_response['hits']:
-            if re.match(term, candidate['filename']):
-                return_list.append(candidate['filename'])
+            if re.match(term, candidate['fileName']):
+                return_list.append(candidate['fileName'])
             else:
-                secondary_return_list.append(candidate['filename'])
+                secondary_return_list.append(candidate['fileName'])
         return_list.extend(secondary_return_list)
         return return_list
 
@@ -39,7 +39,7 @@ class ResultsGetter:
     def parse_meilisearch_results(self):
         parsed_results = []
         for hit in self.meilisearch_response['hits']:
-            parsed_results.append(hit['filename'])
+            parsed_results.append(hit['fileName'])
         self.results = parsed_results
 
 

@@ -33,7 +33,7 @@ elif len(sys.argv) == 2:
         data = {
             'q': search_term,
             'limit': 40,
-            'attributesToRetrieve': [ 'filename' ]
+            'attributesToRetrieve': [ 'fileName' ]
         }
         response = requests.post(url, headers=headers, json=data)
         rg = ResultsGetter()
