@@ -35,7 +35,7 @@ def do_update():
         file_basename = os.path.basename(file_path).split('.')[0]
         file_extension = os.path.splitext(file_path)[1].lower()
 
-        if file_extension != ".txt":
+        if file_extension != ".org":
             update = False
 
         if len(file_basename) == 0:
