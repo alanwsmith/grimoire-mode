@@ -24,6 +24,8 @@ elif len(sys.argv) == 2:
     with open(config_path) as _config:
         config = json.load(_config)
         search_term = sys.argv[1]
+
+
         url = 'http://127.0.0.1:7700/indexes/grimoire/search'
         token = keyring.get_password('alan--meilisearch--scratchpad--search-key', 'alan')
         headers = {
@@ -33,8 +35,12 @@ elif len(sys.argv) == 2:
         data = {
             'q': search_term,
             'limit': 40,
-            'attributesToRetrieve': [ 'fileName' ]
+            'attributesToRetrieve': [ 'fileName' ],
         }
+        facet_split = search_term.split("-")
+        if len(facet_split) > 1:
+            data['filter'] = f'facets = {facet_split[0]}-'
+
         response = requests.post(url, headers=headers, json=data)
         rg = ResultsGetter()
         rg.search_term = search_term
