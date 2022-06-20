@@ -45,6 +45,16 @@
 
 (defun grimoire-mode-search ()
   (interactive)
+  (setq grimoireFrame nil)
+  (dolist (frame (frame-list))
+    (if (frame-parameter frame 'grimoirex) 
+        (setq grimoireFrame frame)))
+  (if (not grimoireFrame)
+      ((lambda() 
+         (make-frame)
+         (set-frame-parameter nil 'grimoirex t)))
+    (select-frame-set-input-focus grimoireFrame))
+
   (grimoire-mode-handle-selection(helm :sources
         (helm-build-async-source "Grimoire Search"
           :follow 1
