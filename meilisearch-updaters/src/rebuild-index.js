@@ -56,3 +56,8 @@ client
     .addDocuments(payload)
     // .then((res) => console.log(res))
 
+client
+    .index(indexName)
+    .updateFilterableAttributes([
+        'facets'
+    ])
