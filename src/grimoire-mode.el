@@ -12,10 +12,18 @@
 (defconst grimoire-mode-buffer "*Grimoire*"
   "Name of the Grimoire buffer")
 
+;; TODO: Figure out where to put this
+(defvar grimoire-history-file "/Users/alan/Desktop/grimoire-history.txt")
+
 (defun grimoire-mode-handle-selection (selection)
   (unless (string= selection nil)
     (unless (string= selection "Ready...")
       (progn
+        (with-temp-file grimoire-history-file
+          (insert selection)
+          (insert "\n")
+          (if (file-exists-p grimoire-history-file)
+              (insert-file-contents grimoire-history-file)))
         (find-file(concat grimoire-mode-directory "/" selection))
         (org-mode)
         )
