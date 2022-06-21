@@ -76,7 +76,7 @@ class ResultsGetter:
                     history.append(item)
 
         # write the updated history file back out
-        with open ("/Users/alan/Desktop/grimoire-history-tmp.txt", 'w') as _history_out:
+        with open ("/Users/alan/Desktop/grimoire-history.txt", 'w') as _history_out:
             _history_out.write("".join(history[0:15]))
 
         if self.search_term == '':
