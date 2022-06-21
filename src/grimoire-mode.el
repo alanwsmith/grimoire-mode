@@ -52,11 +52,13 @@
       (erase-buffer)
       (find-file(concat grimoire-mode-directory "/" candidate))
       (insert-into-buffer grimoire-mode-buffer)
-      (unless (buffer-modified-p)
-        (kill-buffer (current-buffer))
-        )
+
+      ;; (unless (buffer-modified-p)
+      ;;   (kill-buffer (current-buffer))
+      ;;   )
+
       (goto-char (point-min))
-      (org-mode)
+      ;; (org-mode)
     )
     )
   )
