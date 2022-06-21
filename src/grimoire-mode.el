@@ -19,12 +19,22 @@
   (unless (string= selection nil)
     (unless (string= selection "Ready...")
       (progn
+        (setq grimoire-file-name selection)
+        (if (string=
+             (subseq selection (- (length selection) 1))
+             ".")
+            (progn
+              (setq grimoire-file-name (concat selection "org"))
+              (make-empty-file (concat grimoire-mode-directory "/" grimoire-file-name))
+              )
+          )
         (with-temp-file grimoire-history-file
-          (insert selection)
+          (insert grimoire-file-name)
           (insert "\n")
+          ;; TODO: Make the file if it doesn't exist. 
           (if (file-exists-p grimoire-history-file)
               (insert-file-contents grimoire-history-file)))
-        (find-file(concat grimoire-mode-directory "/" selection))
+        (find-file(concat grimoire-mode-directory "/" grimoire-file-name))
         (org-mode)
         )
       )

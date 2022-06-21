@@ -16,36 +16,44 @@ from results_getter.results_getter import ResultsGetter
 if len(sys.argv) == 1:
     print("Ready...")
 elif len(sys.argv) == 2:
+    search_term = sys.argv[1]
     config_path = os.path.join(
         Path.home(),
         '.config',
         'grimoire-mode',
         'search-config.json')
-    with open(config_path) as _config:
-        config = json.load(_config)
-        search_term = sys.argv[1]
 
 
-        url = 'http://127.0.0.1:7700/indexes/grimoire/search'
-        token = keyring.get_password('alan--meilisearch--scratchpad--search-key', 'alan')
-        headers = {
-            'Authorization': f'Bearer {token}',
-            'Content-Type': 'application/json'
-        }
-        data = {
-            'q': search_term,
-            'limit': 40,
-            'attributesToRetrieve': [ 'fileName' ],
-        }
-        facet_split = search_term.split("-")
-        if len(facet_split) > 1:
-            data['filter'] = f'facets = {facet_split[0]}-'
+    # Return verbetum if there's a
+    # dot at the end for making a new
+    # file
 
-        response = requests.post(url, headers=headers, json=data)
-        rg = ResultsGetter()
-        rg.search_term = search_term
-        rg.exclusions = config['exclusions']
-        rg.meilisearch_response = response.json()
-        rg.generate_results()
+    if search_term.endswith('.'):
+        print(search_term)
+    else:
+        with open(config_path) as _config:
+            config = json.load(_config)
 
-        print("\n".join(rg.results))
+            url = 'http://127.0.0.1:7700/indexes/grimoire/search'
+            token = keyring.get_password('alan--meilisearch--scratchpad--search-key', 'alan')
+            headers = {
+                'Authorization': f'Bearer {token}',
+                'Content-Type': 'application/json'
+            }
+            data = {
+                'q': search_term,
+                'limit': 40,
+                'attributesToRetrieve': [ 'fileName' ],
+            }
+            facet_split = search_term.split("-")
+            if len(facet_split) > 1:
+                data['filter'] = f'facets = {facet_split[0]}-'
+
+            response = requests.post(url, headers=headers, json=data)
+            rg = ResultsGetter()
+            rg.search_term = search_term
+            rg.exclusions = config['exclusions']
+            rg.meilisearch_response = response.json()
+            rg.generate_results()
+
+            print("\n".join(rg.results))
