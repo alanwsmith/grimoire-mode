@@ -45,9 +45,10 @@ elif len(sys.argv) == 2:
                 'limit': 40,
                 'attributesToRetrieve': [ 'fileName' ],
             }
-            facet_split = search_term.split("-")
-            if len(facet_split) > 1:
-                data['filter'] = f'facets = {facet_split[0]}-'
+
+            # facet_split = search_term.split("-")
+            # if len(facet_split) > 1:
+            #     data['filter'] = f'facets = {facet_split[0]}-'
 
             response = requests.post(url, headers=headers, json=data)
             rg = ResultsGetter()
