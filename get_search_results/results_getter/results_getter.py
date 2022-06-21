@@ -1,5 +1,7 @@
 import re
 
+from pathlib import Path
+
 class ResultsGetter:
 
     # NOTE: exclusions are only taken out
@@ -67,13 +69,16 @@ class ResultsGetter:
 
 
     def generate_results(self):
-        # TODO: Handle if this file doesn't exist
+        # TODO: Handle if this history file doesn't exist
         history = []
         with open ("/Users/alan/Desktop/grimoire-history.txt") as _history:
             tmp_history = _history.readlines()
             for item in tmp_history:
-                if item not in history:
-                    history.append(item)
+                # TODO: Setup the grimoire directory in a config variable
+                full_path = f"/Users/alan/Grimoire/{item}".strip()
+                if Path(full_path).is_file():
+                    if item not in history:
+                        history.append(item)
 
         # write the updated history file back out
         with open ("/Users/alan/Desktop/grimoire-history.txt", 'w') as _history_out:
