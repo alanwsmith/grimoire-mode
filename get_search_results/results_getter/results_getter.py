@@ -68,8 +68,16 @@ class ResultsGetter:
 
     def generate_results(self):
         # TODO: Handle if this file doesn't exist
+        history = []
         with open ("/Users/alan/Desktop/grimoire-history.txt") as _history:
-            history = _history.readlines()
+            tmp_history = _history.readlines()
+            for item in tmp_history:
+                if item not in history:
+                    history.append(item)
+
+        # write the updated history file back out
+        with open ("/Users/alan/Desktop/grimoire-history-tmp.txt", 'w') as _history_out:
+            _history_out.write("".join(history[0:15]))
 
         if self.search_term == '':
             self.results = ['Ready...']
