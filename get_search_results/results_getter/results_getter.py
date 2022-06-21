@@ -67,10 +67,16 @@ class ResultsGetter:
 
 
     def generate_results(self):
+        # TODO: Handle if this file doesn't exist
+        with open ("/Users/alan/Desktop/grimoire-history.txt") as _history:
+            history = _history.readlines()
+
         if self.search_term == '':
             self.results = ['Ready...']
+            self.results = history
         elif len(self.search_term) == 1:
             self.results = ['Ready...']
+            self.results = history
         else:
             self.load_nonce()
             self.parse_meilisearch_results()
