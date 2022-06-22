@@ -39,6 +39,15 @@ if (process.argv.length > 1) {
                     host: host,
                     apiKey: apiKey,
                 });
+
+                // delete the id to deal with
+                // renames. TODO: Figure out if this
+                // is a problem if the document id
+                // doesn't yet. 
+                client
+                    .index(indexName)
+                    .deleteDocument(payload[0].id)
+
                 client
                     .index(indexName)
                     .addDocuments(payload)
