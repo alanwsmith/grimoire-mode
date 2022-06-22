@@ -67,6 +67,9 @@
   (interactive)
   (setq grimoireFrame nil)
   (dolist (frame (frame-list))
+    ;; TODO: rename this from "grimoirex"
+    ;; to "grimoire-frame" (making sure
+    ;; it doesn't break anything)
     (if (frame-parameter frame 'grimoirex) 
         (setq grimoireFrame frame)))
   (if (not grimoireFrame)
@@ -74,7 +77,13 @@
          (make-frame)
          (set-frame-parameter nil 'grimoirex t)))
     (select-frame-set-input-focus grimoireFrame))
-
+  ;; save the most recent thing before changing. 
+  ;; TODO: Remove this (potentailly) when a
+  ;; global setting is in place to auto-save
+  ;; on focus loss. 
+  (if (buffer-file-name)
+      (save-buffer)
+    )
   (grimoire-mode-handle-selection(helm :sources
         (helm-build-async-source "Grimoire Search"
           :follow 1
