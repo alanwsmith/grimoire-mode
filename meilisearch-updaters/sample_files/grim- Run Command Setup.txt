@@ -1,0 +1,333 @@
+#+TITLE: Custom Setup To Run A Command In An External Process
+#+DATE: 2022-06-03T18:48:45
+#+ID: 2a5pzbdudndq
+#+CATEGORY: Emacs 
+#+STATUS: pending-
+#+TYPE: post
+
+---
+
+** Usage
+
+NOTE: Of course, another way to do this
+is to have a watcher process. As long
+as there's no lag, that's probably
+a better way to go (or, at least, less
+hacky) - see: fswatch - gotta set
+it up with files to ignore though
+so it doesn't trigger off of tmp files
+(and running `mocha` in javascript
+(which is working better for me than
+jest when it comes to imports)) seems
+like a solid play.
+
+
+NOTE: Right now it's always the last file
+that gets added that runs, you can't use
+`<f9> a` on a file a second time and have
+it move back to the front. You have to start
+over by clearing the full list with the
+setq buffer list thing below. 
+
+TKTKTKTK: Maybe a good way to deal with that
+is to have a second var that gets set at the
+same time that is just the latest file. 
+
+Right now the thing to do is to run through
+the various sections here and execute the
+blocks to get everything loaded. Once
+things are tangled and output, that won't
+be necessary.
+
+For the main usage. Hit `<f9> a` on a file
+to add it to the list of files that will
+be saved when a run is requested.
+whichever file is the last one to be
+marked with that is the one that will
+be executed.
+
+Start execuation wtih `<f9> r`.
+
+
+
+---
+
+TODO: Rename this from `grim-` to `emacs-`?
+TODO: Setup hotkey to reset the buffer? Or just come here and do it?
+TODO: Set this up so that if you're in an org mode file it executes the
+block, if your in another mode it runs that file (could even setup per mode
+if necessary at some point), that would just always let you hit the
+hotkey and have it do its thing
+
+
+
+#+NAME: hidden_check_buffer_list
+#+begin_src elisp :results output :wrap example 
+
+  (prin1 aws-run-buffers)
+
+#+end_src
+
+#+RESULTS: hidden_check_buffer_list
+#+begin_example
+nil
+#+end_example
+
+
+Reset the buffers here
+
+#+NAME: hidden_reset_buffers
+#+begin_src elisp :results none 
+
+  (setq aws-run-buffers (list))
+
+#+end_src
+
+Setup the tmp file here
+
+#+begin_src elisp
+
+  (defvar aws-run-tmp-file
+    "/Users/alan/Desktop/emacs-tmp.log")
+#+end_src
+
+#+RESULTS:
+: aws-run-tmp-file
+
+TODO: format this stuff with listings
+
+In progress. See about getting a hotkey setup to
+add files that will be saved with the last one
+being the one that will be run. Will still have
+to setup the arguments. Can probalby use this
+file for that. 
+
+---
+
+Create the list to hold the buffers that
+should be saved before each run (and the
+first one of which will be what's run)
+
+
+#+begin_src elisp :results none 
+
+  (defvar aws-run-buffers (list))
+
+#+end_src
+
+
+---
+
+
+Create the hotkey function to add
+buffers to the list:
+
+
+#+begin_src elisp :results none
+
+  ;; TODO: Add making a hotkey with a lambda to that
+  ;; post about making hot keys and point out that
+  ;; the `(interactive)` has to be there (todo
+  ;; confirm the interattive is necessary)
+
+  (global-set-key (kbd "<f9> a")
+                  (lambda ()
+                    (interactive)
+                    (add-to-list 'aws-run-buffers (buffer-name))))
+
+#+end_src
+
+
+Add the hotkey to run the thing
+
+
+
+#+begin_src elisp :results none
+
+  (global-set-key (kbd "<f9> r") 'aws-run )
+  (global-set-key (kbd "<f9> c") 'org-ctrl-c-ctrl-c)
+
+#+end_src
+
+
+Note that I was doing it like this with an add-hook
+but now I'm just making it a global since I don't
+have anything else mapped to the key, but I might
+change that at some point so it's a little more
+explicit. 
+
+#+begin_src elisp :eval never 
+
+  ;; (add-hook 'python-mode-hook
+  ;;           (lambda () (local-set-key (kbd "s-r") 'aws-run))
+  ;;           )
+
+#+end_src
+
+
+---
+
+Andd this is the code the saves the files
+and runs whatever the most recent one that was
+added to the list is. 
+
+
+TODO: Make an arguments list that you can pass to
+
+#+begin_src elisp :results none :tangle ~/Desktop/tangle.el
+
+  (defun aws-run ()
+    (interactive)
+    ;; make a temporary list for the loop
+    ;; since items need to be removed.
+    ;; TODO: figure out if there's a
+    ;; more concise way to do this that doesn't
+    ;; require makeing a copy of the list. 
+    (setq tmp-list (copy-list aws-run-buffers))
+    (save-current-buffer 
+      (while tmp-list 
+        (when (get-buffer (car tmp-list))
+          (with-current-buffer (car tmp-list)
+            (save-buffer)
+            )
+          )
+        (setq tmp-list (cdr tmp-list))
+        )
+      ;; call the first buffer in the list and
+      ;; run it if it exists
+      (when (get-buffer (car aws-run-buffers))
+        (with-current-buffer (car aws-run-buffers)
+          (call-process (buffer-file-name) nil `(:file ,aws-run-tmp-file) nil)
+          )
+        )
+      )
+    )
+
+#+end_src
+
+
+---
+
+
+
+#+begin_src elisp :wrap example :results output
+
+  (defvar testit '())
+  (setq testit '())
+
+  ;; (add-to-list 'testit 'x)
+  ;; (add-to-list 'testit 'y)
+  ;; (add-to-list 'testit 'z)
+  ;; (add-to-list 'testit (buffer-name))
+  ;; (prin1 testit)
+  ;; (prin1 (buffer-name))
+
+
+   (global-set-key (kbd "<f9> a")
+                  (lambda () (interactive) (add-to-list 'testit (buffer-name))))
+
+   ; (global-set-key (kbd "<f9> a")
+    ;              (message "here"herehere ))
+
+   ;; (global-set-key (kbd "<f9> a")
+     ;;            (lambda () (interactive) (message "here")))
+
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+#+end_example
+
+
+
+---
+
+TODO: Format this with the break so the prose
+part is below
+
+These are the varaibles that are used.
+
+
+#+NAME: listing_variables
+#+begin_src elisp :results none :wrap example :post results_padder(data=*this*)
+
+  (setq aws-run-tmp-file "/Users/alan/Desktop/emacs-log.txt")
+  (setq aws-run-arguments '("py- test"))
+
+
+#+end_src
+
+#+RESULTS: listing_variables
+#+begin_example
+
+
+#+end_example
+
+
+TODO: Move the hook setup to the .spacemacs config
+
+TODO: Consider moving the buffer list to an outside
+variable seting? Don't know that that matters
+though. 
+
+
+This is how I setup to run commands for things
+that benefit from an external process.
+
+
+
+Add add this to my `~/spacemacs` file in the
+`defun dotspacemacs/user-config` section
+
+
+#+begin_src elisp :results none :eval never
+
+  (add-hook 'python-mode-hook
+            (lambda () (local-set-key (kbd "s-r") 'aws-run))
+            )
+
+#+end_src
+
+
+
+This version will run whichever file the `s-r`
+(aka command-r) is run in. 
+
+TODO: See about moving this to Command-Shift-r
+
+
+#+begin_src elisp :results none
+
+  (defun aws-run ()
+    (interactive)
+    (setq aws-run-tmp-file "/Users/alan/Desktop/emacs-tmp.txt")
+    (setq aws-run-buffers '(
+                            "results_getter.py"
+                            "test_results_getter.py"
+                            "get_search_results<get_search_results>"
+                            ))
+    (setq tmp-list (copy-list aws-run-buffers))
+    (save-current-buffer 
+      (while tmp-list 
+        (when (get-buffer (car tmp-list))
+          (with-current-buffer (car tmp-list)
+            (save-buffer)
+            )
+          )
+        (setq tmp-list (cdr tmp-list))
+        )
+      )
+    (call-process (buffer-file-name) nil `(:file ,aws-run-tmp-file))
+    )
+
+  ;; TODO: Move this to .spacemacs
+  (add-hook 'python-mode-hook
+            (lambda () (local-set-key (kbd "s-r") 'aws-run))
+            )
+
+
+#+end_src
+
+
+

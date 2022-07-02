@@ -46,6 +46,26 @@ class ResultsGetterTest(unittest.TestCase):
         self.assertEqual(expected, results)
 
 
+    def test_integration_only_one_character_in_search_term(self):
+        # NOTE: This probably won't get hit in prod
+        # since the process will bail before this is
+        # called. 
+        rg.search_term = 'a'
+        rg.exclusions = ['private-']
+        rg.meilisearch_response = {
+            'hits': [
+                { 'filename': 'example- a.txt'},
+                { 'filename': 'widget- b.txt'},
+                { 'filename': 'private- c.txt'},
+                { 'filename': 'example- d.txt'}
+            ]
+        }
+        rg.generate_results()
+        expected = ['Ready...']
+        results = rg.results
+        self.assertEqual(expected, results)
+
+
     def test_intregration_without_nonce(self):
         rg.search_term = 'test'
         rg.exclusions = ['private-']
@@ -61,7 +81,6 @@ class ResultsGetterTest(unittest.TestCase):
         expected = ['example- test 6.txt', 'widget- test 7.txt', 'example- test 9.txt']
         results = rg.results
         self.assertEqual(expected, results)
-
 
 
     def test_load_nonce(self):
@@ -87,11 +106,6 @@ class ResultsGetterTest(unittest.TestCase):
         self.assertEqual(expected, results)
 
 
-    def test_ready_for_no_results(self):
-        expect = "Ready..."
-        result = rg.search("")
-        self.assertEqual(expect, result)
-
     def test_basic_results(self):
         rg.meilisearch_response = {
             "hits": [
@@ -103,6 +117,7 @@ class ResultsGetterTest(unittest.TestCase):
         expect = ['example- a.txt', 'example- b.txt', 'widget- c.txt']
         result = rg.filtered_response('example-')
         self.assertEqual(expect, result)
+
 
     def test_sort_results(self):
         rg.nonce = 'example-'
@@ -133,28 +148,6 @@ class ResultsGetterTest(unittest.TestCase):
         expect = ['example- a.txt', 'widget- c.txt']
         result = rg.results
         self.assertEqual(expect, result)
-
-
-
-    # def test_hide_private_results(self):
-    #     # remove private nonce words from results
-    #     # by default
-    #     rg.meilisearch_response = {
-    #         "hits": [
-    #             { "filename": "private- a.txt"},
-    #             { "filename": "widget- c.txt"},
-    #             { "filename": "example- b.txt"}
-    #         ]
-    #     }
-    #     rg.nonce_words_to_exclude = ['private-']
-    #     expect = ['widget- c.txt', 'example- b.txt']
-    #     result = rg.filtered_response_dev('foo-')
-    #     self.assertEqual(expect, result)
-
-
-
-
-
 
 
 
