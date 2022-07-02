@@ -59,5 +59,5 @@ client
 client
     .index(indexName)
     .updateFilterableAttributes([
-        'facets'
+        'facets', 'fileName'
     ])
