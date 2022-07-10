@@ -2,6 +2,9 @@ import re
 
 from pathlib import Path
 
+history_file_path = "/Users/alan/.config/grimoire-mode/search-history.txt"
+
+
 class ResultsGetter:
 
     # NOTE: exclusions are only taken out
@@ -71,7 +74,7 @@ class ResultsGetter:
     def generate_results(self):
         # TODO: Handle if this history file doesn't exist
         history = []
-        with open ("/Users/alan/Desktop/grimoire-history.txt") as _history:
+        with open (history_file_path) as _history:
             tmp_history = _history.readlines()
             for item in tmp_history:
                 # TODO: Setup the grimoire directory in a config variable
@@ -81,7 +84,7 @@ class ResultsGetter:
                         history.append(item)
 
         # write the updated history file back out
-        with open ("/Users/alan/Desktop/grimoire-history.txt", 'w') as _history_out:
+        with open (history_file_path, 'w') as _history_out:
             _history_out.write("".join(history[0:15]))
 
         if self.search_term == '':
