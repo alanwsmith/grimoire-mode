@@ -36,7 +36,7 @@
         (find-file(concat grimoire-mode-directory "/" grimoire-file-name))
         (set-buffer (buffer-name))
         (org-mode)
-        (flyspell-buffer)
+        ;; (flyspell-buffer)
         (visual-line-mode)
         )
       )
@@ -82,9 +82,9 @@
   ;; TODO: Remove this (potentailly) when a
   ;; global setting is in place to auto-save
   ;; on focus loss.
-  (if (buffer-file-name)
-      (save-buffer)
-    )
+  ;;(if (buffer-file-name)
+   ;;   (save-buffer)
+    ;;)
   (grimoire-mode-handle-selection(helm :sources
         (helm-build-async-source "Grimoire Search"
           :follow 1
